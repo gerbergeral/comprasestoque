@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pedidos e Estoque · Rede Gerber</title>
+<style>
+:root{
+  --bg:#f3f4f6;--card:#fff;--ink:#1c2230;--mut:#6b7280;--line:#e5e7eb;
+  --pri:#0f766e;--pri2:#115e59;--pril:#ccfbf1;
+  --am:#92400e;--amb:#fef3c7;--az:#1e40af;--azb:#dbeafe;--ro:#5b21b6;--rob:#ede9fe;
+  --vc:#155e75;--vcb:#cffafe;--vd:#065f46;--vdb:#d1fae5;--vm:#991b1b;--vmb:#fee2e2;--cz:#374151;--czb:#e5e7eb
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.4}
+header{background:var(--ink);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;position:sticky;top:0;z-index:20}
+header h1{font-size:16px;margin:0;flex:1;font-weight:650;letter-spacing:.2px}
+header .chip{background:rgba(255,255,255,.12);padding:4px 10px;border-radius:99px;font-size:13px}
+header button{background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:8px;padding:6px 10px;cursor:pointer;font-size:13px}
+main{max-width:1150px;margin:0 auto;padding:16px}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:14px;padding-bottom:2px}
+.tabs button{border:1px solid var(--line);background:var(--card);padding:9px 14px;border-radius:10px;cursor:pointer;white-space:nowrap;font-size:14px;color:var(--ink)}
+.tabs button.on{background:var(--pri);border-color:var(--pri);color:#fff}
+.tabs .n{display:inline-block;min-width:20px;padding:0 6px;margin-left:6px;border-radius:99px;background:var(--vmb);color:var(--vm);font-size:12px;font-weight:700}
+.tabs button.on .n{background:#fff}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+.card h2{font-size:17px;margin:0 0 12px}
+.card h3{font-size:15px;margin:0 0 10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.full{grid-column:1/-1}
+label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--mut);font-weight:600}
+input,select,textarea{font:inherit;font-size:15px;color:var(--ink);border:1px solid #d1d5db;border-radius:9px;padding:9px 10px;background:#fff;width:100%}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--pril);border-color:var(--pri)}
+.btn{border:1px solid #d1d5db;background:#fff;color:var(--ink);border-radius:9px;padding:8px 12px;cursor:pointer;font-size:14px;font-weight:600}
+.btn:hover{background:#f9fafb}
+.btn.prim{background:var(--pri);border-color:var(--pri);color:#fff;padding:11px 14px}
+.btn.prim:hover{background:var(--pri2)}
+.btn.ok{background:var(--vdb);border-color:#a7f3d0;color:var(--vd)}
+.btn.no{background:var(--vmb);border-color:#fecaca;color:var(--vm)}
+.btn.sm{padding:5px 9px;font-size:13px}
+.hid{display:none!important}
+.muted{color:var(--mut)}
+.filtros{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.filtros select,.filtros input{width:auto;min-width:140px;flex:1}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.chips button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:6px 12px;cursor:pointer;font-size:13px}
+.chips button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.ped{border:1px solid var(--line);border-left:4px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;background:#fff}
+.ped.urg{border-left-color:#dc2626}
+.ped.alta{border-left-color:#f59e0b}
+.ped-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px}
+.ped-desc{font-weight:600;margin-bottom:6px}
+.meta{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13px;color:var(--mut)}
+.extra{font-size:13px;margin-top:6px}
+.extra div{margin-top:2px}
+details{margin-top:8px;font-size:13px}
+summary{cursor:pointer;color:var(--mut)}
+pre{white-space:pre-wrap;font-family:inherit;background:#f9fafb;border-radius:8px;padding:8px;margin:6px 0 0}
+.acoes{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.pill{font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap}
+.s-Solicitado{background:var(--amb);color:var(--am)}
+.s-Aprovado{background:var(--azb);color:var(--az)}
+.s-Em-compra{background:var(--rob);color:var(--ro)}
+.s-Enviado{background:var(--vcb);color:var(--vc)}
+.s-Recebido{background:var(--vdb);color:var(--vd)}
+.s-Recusado,.s-Com-problema{background:var(--vmb);color:var(--vm)}
+.s-Cancelado{background:var(--czb);color:var(--cz)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;cursor:default}
+.kpi b{display:block;font-size:26px;line-height:1.1}
+.kpi span{font-size:12.5px;color:var(--mut);font-weight:600}
+.kpi.alerta b{color:var(--vm)}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+th{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.3px;background:#f9fafb}
+td.num,th.num{text-align:right}
+tr.baixo td{background:#fff7ed}
+.tag{font-size:11.5px;font-weight:700;padding:2px 7px;border-radius:99px;background:var(--vmb);color:var(--vm)}
+.vazio{color:var(--mut);text-align:center;padding:24px}
+#login{max-width:380px;margin:40px auto}
+#login .logo{font-size:13px;letter-spacing:2px;color:var(--pri);font-weight:800;margin-bottom:4px}
+#toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 16px;border-radius:10px;font-size:14px;z-index:60;max-width:92vw;display:none;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+#toast.erro{background:#b91c1c}
+#carga{position:fixed;inset:0;background:rgba(255,255,255,.55);display:none;align-items:center;justify-content:center;z-index:50}
+#carga div{width:38px;height:38px;border:4px solid var(--pril);border-top-color:var(--pri);border-radius:50%;animation:g .8s linear infinite}
+@keyframes g{to{transform:rotate(360deg)}}
+#modal{position:fixed;inset:0;background:rgba(17,24,39,.45);display:none;align-items:flex-end;justify-content:center;z-index:40;padding:12px}
+#modal .caixa{background:#fff;border-radius:16px;padding:18px;width:100%;max-width:460px;max-height:90vh;overflow:auto}
+#modal h3{margin:0 0 4px;font-size:17px}
+#modal .sub{font-size:13px;color:var(--mut);margin-bottom:12px}
+#modal form{display:flex;flex-direction:column;gap:10px}
+#modal .bts{display:flex;gap:8px;justify-content:flex-end;margin-top:6px}
+@media(min-width:700px){#modal{align-items:center}}
+@media(max-width:640px){.grid{grid-template-columns:1fr}main{padding:12px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Pedidos &amp; Estoque · Rede Gerber</h1>
+  <span id="quem" class="chip hid"></span>
+  <button id="btAtualizar" class="hid" title="Atualizar">↻ Atualizar</button>
+  <button id="btSair" class="hid">Sair</button>
+</header>
+
+<main>
+  <section id="login" class="card">
+    <div class="logo">REDE GERBER</div>
+    <h2>Entrar</h2>
+    <form id="fLogin" style="display:flex;flex-direction:column;gap:12px">
+      <label>Acesso
+        <select id="lgAcesso" required><option value="">Carregando…</option></select>
+      </label>
+      <label>Senha
+        <input id="lgSenha" type="password" autocomplete="current-password" required>
+      </label>
+      <button class="btn prim" type="submit">Entrar</button>
+      <div id="lgErro" class="muted" style="font-size:13px"></div>
+    </form>
+  </section>
+  <section id="app" class="hid">
+    <nav class="tabs" id="tabs"></nav>
+    <div id="view"></div>
+  </section>
+</main>
+
+<div id="modal"><div class="caixa"><h3 id="mdTit"></h3><div class="sub" id="mdSub"></div><form id="mdForm"></form></div></div>
+<div id="carga"><div></div></div>
+<div id="toast"></div>
+
+<script>
+// ============ CONFIGURAÇÃO: cole aqui o link /exec do Apps Script ============
+const API = 'https://script.google.com/macros/s/AKfycbyfetXgIXuKpcR4kgD0pMnuPFlO_OXuA4t8vWIpeconb_M05oscwN3cBXUfvktsNDhl/exec';
+// ============================================================================
+
+const ABERTOS = ['Solicitado','Aprovado','Em compra','Com problema'];
+const S = {perfil:'', unidade:'', senha:'', d:null, aba:''};
+const F = {unidade:'', depto:'', grupo:'abertos', busca:'', estDepto:'', estBusca:'', movMes:'', movUnid:'', movTipo:'', custoMes:'', meus:'abertos'};
+
+// ---------- utilidades
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num = v => { const n = parseFloat(String(v == null ? '' : v).replace(',', '.')); return isNaN(n) ? 0 : n; };
+const R = v => num(v).toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
+const N = v => num(v).toLocaleString('pt-BR', {maximumFractionDigits:2});
+const dataBR = s => { if (!s) return ''; const p = String(s).slice(0,10).split('-'); return p.length === 3 ? p[2]+'/'+p[1]+'/'+p[0] : String(s); };
+const dias = s => s ? Math.max(0, Math.floor((Date.now() - new Date(s).getTime()) / 864e5)) : 0;
+const mesDe = s => String(s || '').slice(0,7);
+const nomeMes = m => { if (!m) return ''; const [a, mm] = m.split('-'); return ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'][+mm-1] + '/' + a; };
+const sCls = st => 's-' + String(st).replace(/\s+/g, '-');
+const admin = () => S.perfil === 'admin' || S.perfil === 'ceo';
+
+function toast(msg, erro){ const t = $('#toast'); t.textContent = msg; t.className = erro ? 'erro' : ''; t.style.display = 'block'; clearTimeout(t._t); t._t = setTimeout(() => t.style.display = 'none', erro ? 6000 : 3500); }
+function carga(on){ $('#carga').style.display = on ? 'flex' : 'none'; }
+
+async function chamar(acao, p, silencioso){
+  if (!silencioso) carga(true);
+  try {
+    const corpo = {acao, perfil:S.perfil, unidade:S.unidade, senha:S.senha};
+    if (p) corpo.p = p;
+    const r = await fetch(API, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(corpo)});
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.erro || 'Erro desconhecido');
+    return j;
+  } catch (e) {
+    if (e instanceof TypeError || e instanceof SyntaxError) throw new Error('Erro ao conectar. Confira a internet e tente de novo.');
+    throw e;
+  } finally { if (!silencioso) carga(false); }
+}
+
+async function executar(acao, p){
+  try {
+    const j = await chamar(acao, p);
+    S.d = j; fecharModal(); render(); if (j.msg) toast(j.msg);
+    return true;
+  } catch (e) { toast(e.message, true); return false; }
+}
+
+// ---------- login
+async function iniciar(){
+  try { const s = JSON.parse(sessionStorage.getItem('gerberPedidos') || 'null'); if (s) { Object.assign(S, s); const ok = await entrar(true); if (ok) return; } } catch (e) {}
+  try {
+    const j = await chamar('inicio', null, true);
+    $('#lgAcesso').innerHTML = '<option value="">Escolha…</option>' +
+      j.unidades.map(u => `<option value="filial|${esc(u)}">Filial ${esc(u)}</option>`).join('') +
+      '<option value="admin|">Administrativo</option><option value="ceo|">CEO</option>';
+  } catch (e) { $('#lgAcesso').innerHTML = '<option value="">Sem conexão</option>'; $('#lgErro').textContent = e.message + ' (confira o link do Apps Script no index.html)'; }
+}
+
+async function entrar(silencioso){
+  try {
+    const j = await chamar('login', null, silencioso);
+    S.d = j;
+    try { sessionStorage.setItem('gerberPedidos', JSON.stringify({perfil:S.perfil, unidade:S.unidade, senha:S.senha})); } catch (e) {}
+    $('#login').classList.add('hid'); $('#app').classList.remove('hid');
+    ['#quem','#btSair','#btAtualizar'].forEach(s => $(s).classList.remove('hid'));
+    $('#quem').textContent = S.perfil === 'filial' ? 'Filial ' + S.unidade : (S.perfil === 'ceo' ? 'CEO' : 'Administrativo');
+    S.aba = S.perfil === 'filial' ? 'novo' : 'geral';
+    render();
+    return true;
+  } catch (e) {
+    if (!silencioso) $('#lgErro').textContent = e.message;
+    try { sessionStorage.removeItem('gerberPedidos'); } catch (x) {}
+    return false;
+  }
+}
+
+$('#fLogin').addEventListener('submit', ev => {
+  ev.preventDefault();
+  const [perfil, unidade] = $('#lgAcesso').value.split('|');
+  if (!perfil) { $('#lgErro').textContent = 'Escolha o acesso.'; return; }
+  Object.assign(S, {perfil, unidade:unidade || '', senha:$('#lgSenha').value});
+  $('#lgErro').textContent = '';
+  entrar(false);
+});
+$('#btSair').onclick = () => { try { sessionStorage.removeItem('gerberPedidos'); } catch (e) {} location.reload(); };
+$('#btAtualizar').onclick = async () => { try { S.d = await chamar('dados'); render(); toast('Atualizado.'); } catch (e) { toast(e.message, true); } };
+setInterval(async () => { if (!S.d || $('#modal').style.display === 'flex' || document.hidden) return; try { S.d = await chamar('dados', null, true); if (S.aba !== 'novo') render(); } catch (e) {} }, 120000);
+
+// ---------- abas
+function abas(){
+  const d = S.d;
+  if (S.perfil === 'filial') {
+    const aReceber = d.pedidos.filter(p => p.status === 'Enviado').length;
+    return [['novo','Novo pedido'],['meus','Meus pedidos', aReceber]];
+  }
+  const aprov = d.pedidos.filter(p => p.status === 'Solicitado' || p.status === 'Com problema').length;
+  const baixo = d.itens.filter(i => i.ativo !== 'não' && num(i.estoque_minimo) > 0 && num(i.estoque_atual) <= num(i.estoque_minimo)).length;
+  const t = [['geral','Visão geral'],['pedidos','Pedidos', aprov],['estoque','Estoque', baixo],['mov','Movimentações']];
+  if (S.perfil === 'ceo') t.push(['custos','Custos por filial']);
+  return t;
+}
+
+function render(){
+  $('#tabs').innerHTML = abas().map(([k, t, n]) => `<button data-aba="${k}" class="${S.aba === k ? 'on' : ''}">${t}${n ? `<span class="n">${n}</span>` : ''}</button>`).join('');
+  const v = {novo:viewNovo, meus:viewMeus, geral:viewGeral, pedidos:viewPedidos, estoque:viewEstoque, mov:viewMov, custos:viewCustos}[S.aba];
+  $('#view').innerHTML = v ? v() : '';
+  if (S.aba === 'novo') ligarNovo();
+}
+$('#tabs').addEventListener('click', ev => { const b = ev.target.closest('[data-aba]'); if (b) { S.aba = b.dataset.aba; render(); window.scrollTo(0,0); } });
+
+// ---------- FILIAL: novo pedido
+function viewNovo(){
+  const d = S.d;
+  return `<div class="card"><h2>Novo pedido — ${esc(S.unidade)}</h2>
+  <form id="fNovo" class="grid" autocomplete="off">
+    <label>Departamento<select name="departamento" required><option value="">Escolha…</option>${d.departamentos.map(x => `<option>${esc(x)}</option>`).join('')}</select></label>
+    <label>Tipo de pedido<select name="tipo"><option>Item do estoque</option><option>Compra nova</option><option>Reparo / serviço</option></select></label>
+    <label class="full c-est">Item do estoque<select name="item_id"></select></label>
+    <label class="full"><span class="lb-desc">O que precisa</span><textarea name="descricao" rows="2"></textarea></label>
+    <label class="c-qtd">Quantidade<input name="quantidade" type="number" min="1" step="1" value="1" inputmode="numeric"></label>
+    <label class="c-compra">Unidade de medida<input name="unidade_medida" value="un" placeholder="un, caixa, pacote, kg…"></label>
+    <label class="c-unif">Tamanho<input name="tamanho" placeholder="P, M, G, GG…"></label>
+    <label class="c-unif">Colaborador<input name="colaborador" placeholder="Nome de quem vai usar"></label>
+    <label class="full c-rep">Local / equipamento<input name="local_equipamento" placeholder="Ex.: esteira 3, vestiário feminino, ar da sala de spinning"></label>
+    <label>Urgência<select name="urgencia"><option>Normal</option><option>Baixa</option><option>Alta</option><option>Urgente</option></select></label>
+    <label class="full">Por que precisa (justificativa)<textarea name="justificativa" rows="2" placeholder="Ajuda o administrativo a priorizar"></textarea></label>
+    <button class="btn prim full" type="submit">Enviar pedido</button>
+  </form></div>`;
+}
+
+function ligarNovo(){
+  const f = $('#fNovo');
+  const ajustar = () => {
+    const tipo = f.tipo.value, dep = f.departamento.value;
+    const est = tipo === 'Item do estoque', rep = tipo === 'Reparo / serviço';
+    f.querySelectorAll('.c-est').forEach(e => e.classList.toggle('hid', !est));
+    f.querySelectorAll('.c-compra').forEach(e => e.classList.toggle('hid', est || rep));
+    f.querySelectorAll('.c-rep').forEach(e => e.classList.toggle('hid', !rep));
+    f.querySelectorAll('.c-unif').forEach(e => e.classList.toggle('hid', dep !== 'Uniformes'));
+    f.querySelector('.lb-desc').textContent = est ? 'Observação (opcional)' : (rep ? 'O que precisa ser consertado / feito' : 'O que precisa comprar');
+    f.descricao.placeholder = est ? 'Ex.: cor, marca preferida…' : (rep ? 'Descreva o problema' : 'Descreva o item, modelo, referência');
+    if (est) {
+      const itens = S.d.itens.filter(i => !dep || i.departamento === dep);
+      f.item_id.innerHTML = itens.length
+        ? '<option value="">Escolha…</option>' + itens.map(i => `<option value="${esc(i.id)}">${esc(i.item)} (${esc(i.unidade_medida)}) — disponível: ${N(i.estoque_atual)}</option>`).join('')
+        : '<option value="">Nenhum item cadastrado neste departamento — use "Compra nova"</option>';
+    }
+  };
+  f.tipo.onchange = ajustar; f.departamento.onchange = ajustar; ajustar();
+  f.onsubmit = async ev => {
+    ev.preventDefault();
+    const p = Object.fromEntries(new FormData(f).entries());
+    if (await executar('novoPedido', p)) { S.aba = 'meus'; F.meus = 'abertos'; render(); }
+  };
+}
+
+// ---------- FILIAL: meus pedidos
+function viewMeus(){
+  const g = {abertos:p => ABERTOS.includes(p.status), receber:p => p.status === 'Enviado', fim:p => ['Recebido','Recusado','Cancelado'].includes(p.status)};
+  const lista = S.d.pedidos.filter(g[F.meus]);
+  const cont = k => S.d.pedidos.filter(g[k]).length;
+  return `<div class="chips" id="chMeus">
+    ${[['abertos','Em andamento'],['receber','A receber'],['fim','Finalizados']].map(([k,t]) => `<button data-g="${k}" class="${F.meus === k ? 'on' : ''}">${t} (${cont(k)})</button>`).join('')}
+  </div>
+  ${F.meus === 'receber' && lista.length ? '<div class="card muted" style="font-size:14px">Confirme quando o material chegar ou o serviço for feito. Se algo veio errado, use "Recebi com problema".</div>' : ''}
+  ${lista.length ? lista.map(p => cardPedido(p, acoesFilial(p))).join('') : '<div class="card vazio">Nenhum pedido aqui.</div>'}`;
+}
+document.addEventListener('click', ev => { const b = ev.target.closest('#chMeus [data-g]'); if (b) { F.meus = b.dataset.g; render(); } });
+
+function acoesFilial(p){
+  if (p.status === 'Solicitado') return `<button class="btn sm no" data-f="cancelar" data-id="${p.id}">Cancelar pedido</button>`;
+  if (p.status === 'Enviado') return `<button class="btn sm ok" data-f="receber" data-id="${p.id}">${p.tipo === 'Reparo / serviço' ? 'Confirmar serviço feito' : 'Confirmar recebimento'}</button><button class="btn sm no" data-f="problema" data-id="${p.id}">Recebi com problema</button>`;
+  return '';
+}
+
+function cardPedido(p, acoes){
+  const aberto = ABERTOS.includes(p.status);
+  const d = dias(p.criado_em);
+  const extras = [
+    p.tamanho ? `<div><b>Tamanho:</b> ${esc(p.tamanho)}${p.colaborador ? ' · <b>Colaborador:</b> ' + esc(p.colaborador) : ''}</div>` : '',
+    p.local_equipamento ? `<div><b>Local/equipamento:</b> ${esc(p.local_equipamento)}</div>` : '',
+    p.justificativa ? `<div><b>Justificativa:</b> ${esc(p.justificativa)}</div>` : '',
+    p.motivo_recusa && p.status === 'Recusado' ? `<div style="color:var(--vm)"><b>Motivo da recusa:</b> ${esc(p.motivo_recusa)}</div>` : '',
+    p.obs_admin ? `<div><b>Administrativo:</b> ${esc(p.obs_admin)}</div>` : ''
+  ].join('');
+  return `<div class="ped ${p.urgencia === 'Urgente' ? 'urg' : (p.urgencia === 'Alta' ? 'alta' : '')}">
+    <div class="ped-top"><b>${esc(p.id)}${admin() ? ' · ' + esc(p.unidade) : ''}</b><span class="pill ${sCls(p.status)}">${esc(p.status)}</span></div>
+    <div class="ped-desc">${esc(p.descricao)} <span class="muted" style="font-weight:400">· ${N(p.quantidade)} ${esc(p.unidade_medida)}</span></div>
+    <div class="meta">
+      <span>${esc(p.departamento)}</span><span>${esc(p.tipo)}</span>
+      <span>Urgência: ${esc(p.urgencia)}</span>
+      <span>Pedido em ${dataBR(p.criado_em)}${aberto ? ` · <b style="color:${d > 7 ? 'var(--vm)' : 'inherit'}">${d} dia${d === 1 ? '' : 's'} em aberto</b>` : ''}</span>
+      ${p.previsao && aberto ? `<span>Previsão: ${dataBR(p.previsao)}</span>` : ''}
+      ${p.valor_estimado ? `<span>Estimado: ${R(p.valor_estimado)}</span>` : ''}
+      ${p.valor_real ? `<span>Custo: ${R(p.valor_real)}</span>` : ''}
+    </div>
+    ${extras ? `<div class="extra">${extras}</div>` : ''}
+    <details><summary>Histórico</summary><pre>${esc(p.historico)}</pre></details>
+    ${acoes ? `<div class="acoes">${acoes}</div>` : ''}
+  </div>`;
+}
+
+// ---------- ADMIN: visão geral
+function viewGeral(){
+  const d = S.d, P = d.pedidos;
+  const c = st => P.filter(p => p.status === st).length;
+  const abertos = P.filter(p => ABERTOS.includes(p.status));
+  const atrasados = abertos.filter(p => dias(p.criado_em) > 7).length;
+  const baixos = d.itens.filter(i => i.ativo !== 'não' && num(i.estoque_minimo) > 0 && num(i.estoque_atual) <= num(i.estoque_minimo));
+  const kp = (n, t, al) => `<div class="kpi ${al && n ? 'alerta' : ''}"><b>${n}</b><span>${t}</span></div>`;
+  const estrut = abertos.filter(p => p.departamento === 'Manutenção e Estrutura').sort((a, b) => a.criado_em < b.criado_em ? -1 : 1);
+  const matriz = `<div class="tw"><table><thead><tr><th>Filial</th>${d.departamentos.map(x => `<th class="num">${esc(x)}</th>`).join('')}<th class="num">Total</th></tr></thead><tbody>
+    ${d.unidades.map(u => { const lu = abertos.filter(p => p.unidade === u); return `<tr><td><b>${esc(u)}</b></td>${d.departamentos.map(x => { const n = lu.filter(p => p.departamento === x).length; return `<td class="num">${n || '<span class="muted">–</span>'}</td>`; }).join('')}<td class="num"><b>${lu.length}</b></td></tr>`; }).join('')}
+  </tbody></table></div>`;
+  return `<div class="kpis">
+    ${kp(c('Solicitado'), 'Aguardando aprovação', true)}
+    ${kp(c('Aprovado'), 'Aprovados (atender/comprar)')}
+    ${kp(c('Em compra'), 'Em compra')}
+    ${kp(c('Enviado'), 'Enviados, aguardando confirmação')}
+    ${kp(c('Com problema'), 'Com problema no recebimento', true)}
+    ${kp(atrasados, 'Abertos há mais de 7 dias', true)}
+    ${kp(baixos.length, 'Itens no estoque mínimo', true)}
+  </div>
+  <div class="card"><h3>Pedidos em aberto por filial e departamento</h3>${matriz}</div>
+  <div class="card"><h3>Pendências estruturais (Manutenção e Estrutura) — mais antigas primeiro</h3>
+    ${estrut.length ? `<div class="tw"><table><thead><tr><th>Pedido</th><th>Filial</th><th>O quê</th><th>Local</th><th>Status</th><th>Urgência</th><th class="num">Dias</th></tr></thead><tbody>
+      ${estrut.map(p => `<tr><td>${esc(p.id)}</td><td>${esc(p.unidade)}</td><td>${esc(p.descricao)}</td><td>${esc(p.local_equipamento)}</td><td><span class="pill ${sCls(p.status)}">${esc(p.status)}</span></td><td>${esc(p.urgencia)}</td><td class="num">${dias(p.criado_em)}</td></tr>`).join('')}
+    </tbody></table></div>` : '<div class="vazio">Nenhuma pendência estrutural aberta.</div>'}
+  </div>
+  <div class="card"><h3>Itens no estoque mínimo ou abaixo</h3>
+    ${baixos.length ? `<div class="tw"><table><thead><tr><th>Item</th><th>Departamento</th><th class="num">Saldo</th><th class="num">Mínimo</th></tr></thead><tbody>
+      ${baixos.map(i => `<tr class="baixo"><td>${esc(i.item)}</td><td>${esc(i.departamento)}</td><td class="num">${N(i.estoque_atual)} ${esc(i.unidade_medida)}</td><td class="num">${N(i.estoque_minimo)}</td></tr>`).join('')}
+    </tbody></table></div>` : '<div class="vazio">Nenhum item abaixo do mínimo (defina o mínimo de cada item na aba Estoque).</div>'}
+  </div>`;
+}
+
+// ---------- ADMIN: pedidos
+function viewPedidos(){
+  const d = S.d;
+  const grupos = {abertos:p => ABERTOS.includes(p.status), aprovar:p => p.status === 'Solicitado', problema:p => p.status === 'Com problema', enviados:p => p.status === 'Enviado', fim:p => ['Recebido','Recusado','Cancelado'].includes(p.status), todos:() => true};
+  const b = F.busca.toLowerCase();
+  const lista = d.pedidos.filter(grupos[F.grupo])
+    .filter(p => !F.unidade || p.unidade === F.unidade)
+    .filter(p => !F.depto || p.departamento === F.depto)
+    .filter(p => !b || (p.id + ' ' + p.descricao + ' ' + p.local_equipamento + ' ' + p.colaborador).toLowerCase().includes(b));
+  const ordem = {Urgente:0, Alta:1, Normal:2, Baixa:3};
+  if (F.grupo !== 'fim' && F.grupo !== 'todos') lista.sort((x, y) => (ordem[x.urgencia] - ordem[y.urgencia]) || (x.criado_em < y.criado_em ? -1 : 1));
+  const cont = k => d.pedidos.filter(grupos[k]).length;
+  return `<div class="chips" id="chGrupo">${[['abertos','Em aberto'],['aprovar','Aguardando aprovação'],['problema','Com problema'],['enviados','Enviados'],['fim','Finalizados'],['todos','Todos']].map(([k,t]) => `<button data-g="${k}" class="${F.grupo === k ? 'on' : ''}">${t} (${cont(k)})</button>`).join('')}</div>
+  <div class="filtros">
+    <select id="fUn"><option value="">Todas as filiais</option>${d.unidades.map(u => `<option ${F.unidade === u ? 'selected' : ''}>${esc(u)}</option>`).join('')}</select>
+    <select id="fDep"><option value="">Todos os departamentos</option>${d.departamentos.map(x => `<option ${F.depto === x ? 'selected' : ''}>${esc(x)}</option>`).join('')}</select>
+    <input id="fBusca" placeholder="Buscar nº, item, local…" value="${esc(F.busca)}">
+  </div>
+  ${d.limite > 0 ? `<div class="muted" style="font-size:13px;margin-bottom:10px">Pedidos com valor estimado acima de ${R(d.limite)} só a CEO aprova.</div>` : ''}
+  ${lista.length ? lista.map(p => cardPedido(p, acoesAdmin(p))).join('') : '<div class="card vazio">Nenhum pedido com esses filtros.</div>'}`;
+}
+document.addEventListener('click', ev => { const b = ev.target.closest('#chGrupo [data-g]'); if (b) { F.grupo = b.dataset.g; render(); } });
+document.addEventListener('change', ev => {
+  const id = ev.target.id;
+  const mapa = {fUn:'unidade', fDep:'depto', eDep:'estDepto', mMes:'movMes', mUn:'movUnid', mTipo:'movTipo', cMes:'custoMes'};
+  if (mapa[id]) { F[mapa[id]] = ev.target.value; render(); }
+});
+document.addEventListener('input', ev => {
+  const mapa = {fBusca:'busca', eBusca:'estBusca'};
+  const id = ev.target.id;
+  if (mapa[id]) { F[mapa[id]] = ev.target.value; clearTimeout(window._bt); window._bt = setTimeout(() => { render(); const el = document.getElementById(id); if (el) { el.focus(); el.setSelectionRange(el.value.length, el.value.length); } }, 350); }
+});
+
+function acoesAdmin(p){
+  const bt = (a, t, c) => `<button class="btn sm ${c || ''}" data-a="${a}" data-id="${p.id}">${t}</button>`;
+  const est = !!p.item_id, rep = p.tipo === 'Reparo / serviço';
+  const enviar = rep ? 'Serviço concluído' : 'Marcar enviado';
+  let h = '';
+  switch (p.status) {
+    case 'Solicitado': h = (est ? bt('atender_estoque', 'Aprovar e atender do estoque', 'ok') : '') + bt('aprovar', 'Aprovar', est ? '' : 'ok') + bt('recusar', 'Recusar', 'no'); break;
+    case 'Aprovado': h = (est ? bt('atender_estoque', 'Atender do estoque', 'ok') : '') + bt('em_compra', rep ? 'Em execução / orçamento' : 'Em compra') + bt('enviar', enviar, est ? '' : 'ok') + bt('recusar', 'Recusar', 'no'); break;
+    case 'Em compra': h = (est ? bt('atender_estoque', 'Atender do estoque', 'ok') : '') + bt('enviar', enviar, est ? '' : 'ok') + bt('recusar', 'Recusar', 'no'); break;
+    case 'Com problema': h = (est ? bt('atender_estoque', 'Reenviar do estoque', 'ok') : '') + bt('enviar', rep ? 'Serviço refeito' : 'Reenviado', est ? '' : 'ok') + bt('em_compra', 'Em compra'); break;
+    case 'Recusado': case 'Cancelado': h = bt('reabrir', 'Reabrir'); break;
+  }
+  if (ABERTOS.includes(p.status)) h += bt('cancelar', 'Cancelar');
+  return h + bt('obs', 'Observação');
+}
+
+// ---------- modal genérico
+function abrirModal(tit, sub, campos, okTxt, onOk){
+  $('#mdTit').textContent = tit; $('#mdSub').innerHTML = sub || '';
+  const f = $('#mdForm');
+  f.innerHTML = campos.map(c => {
+    const req = c.req ? 'required' : '';
+    if (c.tipo === 'select') return `<label>${c.label}<select name="${c.k}" ${req}>${c.op.map(o => `<option value="${esc(o.v != null ? o.v : o)}" ${String(c.v) === String(o.v != null ? o.v : o) ? 'selected' : ''}>${esc(o.t != null ? o.t : o)}</option>`).join('')}</select></label>`;
+    if (c.tipo === 'area') return `<label>${c.label}<textarea name="${c.k}" rows="3" ${req} placeholder="${esc(c.ph || '')}">${esc(c.v || '')}</textarea></label>`;
+    return `<label>${c.label}<input name="${c.k}" type="${c.tipo || 'text'}" ${c.tipo === 'number' ? 'step="0.01" inputmode="decimal"' : ''} value="${esc(c.v == null ? '' : c.v)}" ${req} placeholder="${esc(c.ph || '')}"></label>`;
+  }).join('') + `<div class="bts"><button type="button" class="btn" id="mdCancel">Voltar</button><button class="btn prim" type="submit">${okTxt}</button></div>`;
+  $('#modal').style.display = 'flex';
+  $('#mdCancel').onclick = fecharModal;
+  f.onsubmit = ev => { ev.preventDefault(); onOk(Object.fromEntries(new FormData(f).entries())); };
+  const pri = f.querySelector('input,select,textarea'); if (pri && window.innerWidth > 700) pri.focus();
+}
+function fecharModal(){ $('#modal').style.display = 'none'; }
+$('#modal').addEventListener('click', ev => { if (ev.target.id === 'modal') fecharModal(); });
+
+// ações nos pedidos
+document.addEventListener('click', ev => {
+  const b = ev.target.closest('[data-a],[data-f]');
+  if (!b || !S.d) return;
+  const p = S.d.pedidos.find(x => x.id === b.dataset.id);
+  if (!p) return;
+  const sub = `<b>${esc(p.id)}</b> · ${esc(p.unidade)} · ${esc(p.descricao)} · ${N(p.quantidade)} ${esc(p.unidade_medida)}`;
+
+  if (b.dataset.f) {
+    const f = b.dataset.f;
+    if (f === 'cancelar') abrirModal('Cancelar pedido', sub, [{k:'obs', label:'Motivo (opcional)', tipo:'area'}], 'Cancelar pedido', v => executar('cancelarPedido', {id:p.id, obs:v.obs}));
+    if (f === 'receber') abrirModal(p.tipo === 'Reparo / serviço' ? 'Confirmar serviço feito' : 'Confirmar recebimento', sub, [{k:'obs', label:'Comentário (opcional)', tipo:'area'}], 'Confirmar', v => executar('confirmarRecebimento', {id:p.id, obs:v.obs}));
+    if (f === 'problema') abrirModal('Recebi com problema', sub, [{k:'obs', label:'O que aconteceu?', tipo:'area', req:true, ph:'Faltou quantidade, veio errado, serviço incompleto…'}], 'Registrar problema', v => executar('confirmarRecebimento', {id:p.id, obs:v.obs, problema:true}));
+    return;
+  }
+
+  const a = b.dataset.a;
+  const envia = v => executar('atualizarPedido', Object.assign({id:p.id, acao_pedido:a}, v));
+  const valEst = {k:'valor_estimado', label:'Valor estimado / orçamento (R$)', tipo:'number', v:p.valor_estimado, req:p.tipo !== 'Item do estoque'};
+  const prev = {k:'previsao', label:'Previsão de entrega/execução', tipo:'date', v:String(p.previsao || '').slice(0,10)};
+  const obs = {k:'obs', label:'Observação para a filial (opcional)', tipo:'area'};
+  if (a === 'aprovar') {
+    const aviso = S.d.limite > 0 && S.perfil !== 'ceo' ? `<br>Acima de ${R(S.d.limite)} só a CEO aprova.` : '';
+    abrirModal('Aprovar pedido', sub + aviso, [valEst, prev, obs], 'Aprovar', envia);
+  }
+  if (a === 'recusar') abrirModal('Recusar pedido', sub, [{k:'motivo', label:'Motivo da recusa', tipo:'area', req:true}], 'Recusar', envia);
+  if (a === 'em_compra') abrirModal('Marcar em compra / execução', sub, [valEst, prev, obs], 'Salvar', envia);
+  if (a === 'enviar') abrirModal(p.tipo === 'Reparo / serviço' ? 'Serviço concluído' : 'Marcar como enviado', sub, [{k:'valor_real', label:'Valor real pago (R$)', tipo:'number', v:p.valor_real || p.valor_estimado}, obs], 'Confirmar', envia);
+  if (a === 'atender_estoque') {
+    const it = S.d.itens.find(i => i.id === p.item_id);
+    const disp = it ? `<br>Disponível no estoque: <b>${N(it.estoque_atual)} ${esc(it.unidade_medida)}</b>` : '';
+    abrirModal('Atender do estoque', sub + disp, [{k:'quantidade_atendida', label:'Quantidade enviada', tipo:'number', v:p.quantidade, req:true}, obs], 'Dar baixa e enviar', envia);
+  }
+  if (a === 'cancelar') abrirModal('Cancelar pedido', sub, [{k:'motivo', label:'Motivo', tipo:'area'}], 'Cancelar pedido', envia);
+  if (a === 'reabrir') abrirModal('Reabrir pedido', sub, [obs], 'Reabrir', envia);
+  if (a === 'obs') abrirModal('Observação', sub, [{k:'obs', label:'Observação (fica no histórico e a filial vê)', tipo:'area', req:true}], 'Salvar', envia);
+});
+
+// ---------- ADMIN: estoque
+function viewEstoque(){
+  const d = S.d, b = F.estBusca.toLowerCase();
+  const lista = d.itens.filter(i => !F.estDepto || i.departamento === F.estDepto).filter(i => !b || String(i.item).toLowerCase().includes(b))
+    .sort((x, y) => (x.departamento + x.item).localeCompare(y.departamento + y.item));
+  const total = lista.filter(i => i.ativo !== 'não').reduce((s, i) => s + num(i.estoque_atual) * num(i.custo_unitario), 0);
+  return `<div class="filtros">
+    <select id="eDep"><option value="">Todos os departamentos</option>${d.departamentos.map(x => `<option ${F.estDepto === x ? 'selected' : ''}>${esc(x)}</option>`).join('')}</select>
+    <input id="eBusca" placeholder="Buscar item…" value="${esc(F.estBusca)}">
+    <button class="btn prim" data-e="novo" style="flex:0">+ Novo item</button>
+  </div>
+  <div class="card"><div class="tw"><table><thead><tr><th>Item</th><th>Departamento</th><th class="num">Saldo</th><th class="num">Mínimo</th><th class="num">Custo médio</th><th class="num">Valor em estoque</th><th></th></tr></thead><tbody>
+  ${lista.length ? lista.map(i => {
+    const baixo = i.ativo !== 'não' && num(i.estoque_minimo) > 0 && num(i.estoque_atual) <= num(i.estoque_minimo);
+    return `<tr class="${baixo ? 'baixo' : ''}" style="${i.ativo === 'não' ? 'opacity:.5' : ''}">
+      <td><b>${esc(i.item)}</b> <span class="muted">${esc(i.unidade_medida)}</span>${baixo ? ' <span class="tag">repor</span>' : ''}${i.ativo === 'não' ? ' <span class="muted">(inativo)</span>' : ''}</td>
+      <td>${esc(i.departamento)}</td><td class="num"><b>${N(i.estoque_atual)}</b></td><td class="num">${N(i.estoque_minimo)}</td>
+      <td class="num">${R(i.custo_unitario)}</td><td class="num">${R(num(i.estoque_atual) * num(i.custo_unitario))}</td>
+      <td><div class="acoes" style="margin:0;flex-wrap:nowrap">
+        <button class="btn sm ok" data-e="entrada" data-id="${esc(i.id)}">Entrada</button>
+        <button class="btn sm" data-e="saida" data-id="${esc(i.id)}">Saída p/ filial</button>
+        <button class="btn sm" data-e="ajuste" data-id="${esc(i.id)}">Ajustar</button>
+        <button class="btn sm" data-e="editar" data-id="${esc(i.id)}">Editar</button>
+      </div></td></tr>`; }).join('') : '<tr><td colspan="7" class="vazio">Nenhum item.</td></tr>'}
+  </tbody><tfoot><tr><td colspan="5"><b>Total em estoque (itens ativos)</b></td><td class="num"><b>${R(total)}</b></td><td></td></tr></tfoot></table></div></div>
+  <div class="muted" style="font-size:13px">Entrada = chegou compra no estoque central (o custo médio é recalculado). Saída p/ filial = envio sem pedido (ex.: reposição mensal de copa). Ajustar = corrigir após contagem física.</div>`;
+}
+
+document.addEventListener('click', ev => {
+  const b = ev.target.closest('[data-e]');
+  if (!b || !S.d) return;
+  const e = b.dataset.e, d = S.d;
+  const i = d.itens.find(x => x.id === b.dataset.id);
+  const sub = i ? `<b>${esc(i.item)}</b> · saldo atual ${N(i.estoque_atual)} ${esc(i.unidade_medida)}` : '';
+  if (e === 'entrada') abrirModal('Entrada no estoque', sub, [
+    {k:'quantidade', label:'Quantidade que entrou', tipo:'number', req:true},
+    {k:'custo_unitario', label:'Custo unitário desta compra (R$)', tipo:'number', v:i.custo_unitario},
+    {k:'obs', label:'Fornecedor / nota fiscal / observação', tipo:'area'}
+  ], 'Registrar entrada', v => executar('entradaEstoque', Object.assign({item_id:i.id}, v)));
+  if (e === 'saida') abrirModal('Saída para filial (sem pedido)', sub, [
+    {k:'unidade', label:'Filial de destino', tipo:'select', op:[{v:'', t:'Escolha…'}].concat(d.unidades), req:true},
+    {k:'quantidade', label:'Quantidade', tipo:'number', req:true},
+    {k:'obs', label:'Observação', tipo:'area', ph:'Ex.: reposição mensal'}
+  ], 'Dar baixa', v => executar('saidaEstoque', Object.assign({item_id:i.id}, v)));
+  if (e === 'ajuste') abrirModal('Ajustar saldo (contagem)', sub, [
+    {k:'novo_saldo', label:'Saldo contado', tipo:'number', req:true},
+    {k:'obs', label:'Motivo', tipo:'area', req:true, ph:'Contagem física, perda, vencido…'}
+  ], 'Ajustar', v => executar('ajusteEstoque', Object.assign({item_id:i.id}, v)));
+  if (e === 'editar' || e === 'novo') {
+    const novo = e === 'novo';
+    const campos = [
+      {k:'departamento', label:'Departamento', tipo:'select', op:[{v:'', t:'Escolha…'}].concat(d.departamentos), v:novo ? F.estDepto : i.departamento, req:true},
+      {k:'item', label:'Nome do item', v:novo ? '' : i.item, req:true},
+      {k:'unidade_medida', label:'Unidade de medida', v:novo ? 'un' : i.unidade_medida, ph:'un, caixa, pacote, fardo…'},
+      {k:'estoque_minimo', label:'Estoque mínimo (alerta de reposição)', tipo:'number', v:novo ? 0 : i.estoque_minimo},
+      {k:'custo_unitario', label:'Custo unitário (R$)', tipo:'number', v:novo ? '' : i.custo_unitario}
+    ];
+    if (novo) campos.push({k:'estoque_inicial', label:'Saldo inicial (o que já tem hoje)', tipo:'number', v:0});
+    else campos.push({k:'ativo', label:'Situação', tipo:'select', op:[{v:'sim', t:'Ativo'}, {v:'não', t:'Inativo (some do pedido das filiais)'}], v:i.ativo === 'não' ? 'não' : 'sim'});
+    abrirModal(novo ? 'Novo item do estoque' : 'Editar item', novo ? '' : 'O saldo só muda por Entrada, Saída ou Ajuste.', campos, 'Salvar',
+      v => executar('salvarItem', Object.assign(novo ? {} : {id:i.id}, v)));
+  }
+});
+
+// ---------- ADMIN: movimentações
+function viewMov(){
+  const d = S.d, M = d.movimentos || [];
+  const meses = [...new Set(M.map(m => mesDe(m.data)))].sort().reverse();
+  if (!F.movMes && meses.length) F.movMes = meses[0];
+  const lista = M.filter(m => !F.movMes || mesDe(m.data) === F.movMes).filter(m => !F.movUnid || m.unidade_destino === F.movUnid).filter(m => !F.movTipo || m.tipo === F.movTipo);
+  const tot = t => lista.filter(m => m.tipo === t).reduce((s, m) => s + num(m.valor_total), 0);
+  return `<div class="filtros">
+    <select id="mMes"><option value="">Todos os meses</option>${meses.map(m => `<option value="${m}" ${F.movMes === m ? 'selected' : ''}>${nomeMes(m)}</option>`).join('')}</select>
+    <select id="mUn"><option value="">Todos os destinos</option><option ${F.movUnid === 'Estoque central' ? 'selected' : ''}>Estoque central</option>${d.unidades.map(u => `<option ${F.movUnid === u ? 'selected' : ''}>${esc(u)}</option>`).join('')}</select>
+    <select id="mTipo"><option value="">Todos os tipos</option>${['Entrada','Saída','Ajuste'].map(t => `<option ${F.movTipo === t ? 'selected' : ''}>${t}</option>`).join('')}</select>
+  </div>
+  <div class="kpis"><div class="kpi"><b>${R(tot('Entrada'))}</b><span>Entradas (compras p/ estoque)</span></div><div class="kpi"><b>${R(tot('Saída'))}</b><span>Saídas para filiais</span></div><div class="kpi"><b>${R(tot('Ajuste'))}</b><span>Ajustes (perdas/sobras)</span></div></div>
+  <div class="card"><div class="tw"><table><thead><tr><th>Data</th><th>Tipo</th><th>Item</th><th>Departamento</th><th class="num">Qtd</th><th>Destino</th><th>Pedido</th><th class="num">Valor</th><th>Responsável</th><th>Obs</th></tr></thead><tbody>
+  ${lista.length ? lista.map(m => `<tr><td>${dataBR(m.data)}</td><td>${esc(m.tipo)}</td><td>${esc(m.item)}</td><td>${esc(m.departamento)}</td><td class="num">${N(m.quantidade)}</td><td>${esc(m.unidade_destino)}</td><td>${esc(m.pedido_id)}</td><td class="num">${R(m.valor_total)}</td><td>${esc(m.responsavel)}</td><td style="white-space:normal;min-width:160px">${esc(m.obs)}</td></tr>`).join('') : '<tr><td colspan="10" class="vazio">Nenhuma movimentação.</td></tr>'}
+  </tbody></table></div></div>`;
+}
+
+// ---------- CEO: custos por filial
+function viewCustos(){
+  const d = S.d, M = d.movimentos || [];
+  const diretos = d.pedidos.filter(p => p.tipo !== 'Item do estoque' && num(p.valor_real) > 0 && p.enviado_em && ['Enviado','Recebido','Com problema'].includes(p.status));
+  const meses = [...new Set(M.filter(m => m.tipo === 'Saída').map(m => mesDe(m.data)).concat(diretos.map(p => mesDe(p.enviado_em))))].sort().reverse();
+  if (!F.custoMes && meses.length) F.custoMes = meses[0];
+  const noMes = s => !F.custoMes || mesDe(s) === F.custoMes;
+  const saidas = M.filter(m => m.tipo === 'Saída' && noMes(m.data));
+  const dir = diretos.filter(p => noMes(p.enviado_em));
+  const val = (u, dep) => saidas.filter(m => m.unidade_destino === u && (!dep || m.departamento === dep)).reduce((s, m) => s + num(m.valor_total), 0)
+                         + dir.filter(p => p.unidade === u && (!dep || p.departamento === dep)).reduce((s, p) => s + num(p.valor_real), 0);
+  const totDep = dep => d.unidades.reduce((s, u) => s + val(u, dep), 0);
+  const geral = totDep('');
+  const entradas = M.filter(m => m.tipo === 'Entrada' && noMes(m.data)).reduce((s, m) => s + num(m.valor_total), 0);
+  const recusados = d.pedidos.filter(p => p.status === 'Recusado' && noMes(p.atualizado_em)).length;
+  return `<div class="filtros"><select id="cMes"><option value="">Todo o período</option>${meses.map(m => `<option value="${m}" ${F.custoMes === m ? 'selected' : ''}>${nomeMes(m)}</option>`).join('')}</select></div>
+  <div class="kpis">
+    <div class="kpi"><b>${R(geral)}</b><span>Custo enviado às filiais</span></div>
+    <div class="kpi"><b>${R(entradas)}</b><span>Compras para o estoque central</span></div>
+    <div class="kpi"><b>${recusados}</b><span>Pedidos recusados</span></div>
+  </div>
+  <div class="card"><h3>Custo por filial e departamento</h3><div class="tw"><table><thead><tr><th>Filial</th>${d.departamentos.map(x => `<th class="num">${esc(x)}</th>`).join('')}<th class="num">Total</th><th class="num">% da rede</th></tr></thead><tbody>
+    ${d.unidades.map(u => { const t = val(u, ''); return `<tr><td><b>${esc(u)}</b></td>${d.departamentos.map(x => `<td class="num">${val(u, x) ? R(val(u, x)) : '<span class="muted">–</span>'}</td>`).join('')}<td class="num"><b>${R(t)}</b></td><td class="num">${geral ? Math.round(t / geral * 100) + '%' : '–'}</td></tr>`; }).join('')}
+    <tr><td><b>Rede</b></td>${d.departamentos.map(x => `<td class="num"><b>${R(totDep(x))}</b></td>`).join('')}<td class="num"><b>${R(geral)}</b></td><td></td></tr>
+  </tbody></table></div>
+  <div class="muted" style="font-size:13px;margin-top:8px">Soma o que saiu do estoque central para cada filial (custo médio) + compras diretas e serviços pagos com valor real informado. Mês pela data de envio.</div></div>`;
+}
+
+iniciar();
+</script>
+</body>
+</html>
