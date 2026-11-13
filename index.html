@@ -835,6 +835,7 @@ function acoesDetalhe(c){
   } else if (CONFIRMAVEIS.includes(c.status)) {
     h += bt('confirmar', A_RECEBER.includes(c.status) ? '✓ Confirmar recebimento' : '✓ Já recebi', 'ok');
   }
+  if (gestao() && c.status === 'Cancelado' && c.itens.some(l => num(l.qtd_baixada) > 0)) h += bt('devolver', '↩ Devolver itens ao estoque', 'ok');
   if (at) {
     h += bt('comentar', '💬 Comentar') + bt('foto', '📷 Adicionar foto');
     if (gestao() || ['Pendente','Visto'].includes(c.status)) h += bt('cancelar', 'Cancelar chamado', 'no');
@@ -877,7 +878,11 @@ function acaoDetalhe(x){
 
   if (x === 'comentar') return abrirModal('Comentar', sub + '<br>O comentário fica no histórico e ' + (gestao() ? 'a filial vê.' : 'a gestão vê.'), comNome([{k:'texto', label:'Comentário', tipo:'area', req:true}]), 'Enviar', envia('comentar'));
   if (x === 'foto') return abrirModal('Adicionar foto', sub, comNome([{k:'fotos', tipo:'fotos'}, {k:'texto', label:'Legenda (opcional)'}]), 'Enviar foto', v => { if (!(v.fotos || []).length) return toast('Escolha uma foto.', true); envia('addFotos')(v); });
-  if (x === 'cancelar') return abrirModal('Cancelar chamado', sub + '<br>O cancelamento fica registrado com data, hora e quem cancelou.', comNome([{k:'motivo', label:'Motivo do cancelamento', tipo:'area', req:true}]), 'Cancelar chamado', envia('cancelar'));
+  const baixado = c.itens.filter(l => num(l.qtd_baixada) > 0);
+  if (x === 'cancelar') return abrirModal('Cancelar chamado', sub + '<br>O cancelamento fica registrado com data, hora e quem cancelou.', comNome([{k:'motivo', label:'Motivo do cancelamento', tipo:'area', req:true}].concat(gestao() && baixado.length ? [
+      {tipo:'info', html:'Já saiu do estoque para este chamado: <b>' + baixado.map(l => esc(l.item) + ' (' + N(l.qtd_baixada) + ')').join(', ') + '</b>'},
+      {k:'devolver', label:'O que fazer com esse material?', tipo:'select', op:[{v:'sim', t:'Voltou para o almoxarifado — devolver ao estoque'}, {v:'nao', t:'Ficou na filial — não devolver'}], v:'sim'}] : [])), 'Cancelar chamado', envia('cancelar'));
+  if (x === 'devolver') return abrirModal('Devolver itens ao estoque', sub + '<br>Itens que saíram para este chamado: <b>' + baixado.map(l => esc(l.item) + ' (' + N(l.qtd_baixada) + ')').join(', ') + '</b>. Eles voltam ao saldo do almoxarifado e fica registrado como Estorno.', [], 'Devolver ao estoque', envia('devolverEstoque'));
   if (x === 'confirmar') return abrirModal(c.tipo === 'Reparo' ? 'Confirmar serviço feito' : 'Confirmar recebimento', sub, [
     {k:'data_recebimento', label:'Data em que recebeu', tipo:'date', v:hojeISO(), max:hojeISO(), req:true},
     {k:'entregue_por', label:c.tipo === 'Reparo' ? 'Quem fez o serviço / entregou' : 'Quem entregou', tipo:'lista', op:c.entregador ? [c.entregador] : [], v:c.entregador || '', req:true},
@@ -998,7 +1003,7 @@ function viewMov(){
   return `<div class="filtros">
     <select id="mMes"><option value="">Todos os meses</option>${meses.map(m => `<option value="${m}" ${F.movMes === m ? 'selected' : ''}>${nomeMes(m)}</option>`).join('')}</select>
     <select id="mDest"><option value="">Todos os destinos</option>${dest.map(u => `<option ${F.movDest === u ? 'selected' : ''}>${esc(u)}</option>`).join('')}</select>
-    <select id="mTipo"><option value="">Todos os tipos</option>${['Entrada','Saída','Ajuste'].map(t => `<option ${F.movTipo === t ? 'selected' : ''}>${t}</option>`).join('')}</select>
+    <select id="mTipo"><option value="">Todos os tipos</option>${['Entrada','Saída','Ajuste','Estorno'].map(t => `<option ${F.movTipo === t ? 'selected' : ''}>${t}</option>`).join('')}</select>
   </div>
   <div class="card" style="padding:8px"><div class="tw"><table><thead><tr><th>Data</th><th>Tipo</th><th>Item</th><th class="num">Qtd</th><th>Destino</th><th>Chamado</th><th>Responsável</th><th>Obs</th></tr></thead><tbody>
   ${lista.length ? lista.map(m => `<tr><td style="white-space:nowrap">${dataHora(m.data)}</td><td>${esc(m.tipo)}</td><td>${esc(m.item)}<div class="muted peq">${esc(m.departamento)}</div></td><td class="num">${N(m.quantidade)}</td><td>${esc(m.unidade_destino)}</td><td>${m.pedido_id ? `<a href="#" data-abrir="${esc(m.pedido_id)}">${esc(m.pedido_id)}</a>` : ''}</td><td>${esc(m.responsavel)}</td><td>${esc(m.obs)}</td></tr>`).join('') : '<tr><td colspan="8" class="vazio">Nenhuma movimentação.</td></tr>'}
