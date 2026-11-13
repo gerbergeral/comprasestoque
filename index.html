@@ -163,6 +163,66 @@ tr.baixo td{background:#fff7ed}
 #carga p{margin:0;font-weight:600;color:var(--ink);background:#fff;padding:4px 12px;border-radius:99px}
 #carga div{width:38px;height:38px;border:4px solid #d1d5db;border-top-color:#000;border-radius:50%;animation:g .8s linear infinite}
 @keyframes g{to{transform:rotate(360deg)}}
+/* status em trânsito */
+.s-em-transito{background:#111;color:#fff}
+/* linha do tempo: ícones animados */
+.tl .p.a i.em{width:auto;height:auto;border:0;background:none;box-shadow:none;font-size:18px;line-height:16px;margin-top:-2px;animation:pula 1.1s ease-in-out infinite}
+@keyframes pula{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+/* BYD */
+.byd{background:linear-gradient(#f8fafc,#eef2f7);border:1px solid var(--line);border-radius:12px;padding:8px 10px 6px;margin-top:10px;overflow:hidden}
+.byd svg{display:block;width:100%;max-width:340px;height:auto;margin:0 auto}
+.byd .carro{animation:balanca .5s ease-in-out infinite}
+.byd .roda{transform-box:fill-box;transform-origin:center;animation:gira .5s linear infinite}
+.byd .estrada{animation:estrada .45s linear infinite}
+.byd .vento{animation:vento .7s linear infinite}
+.byd p{margin:4px 0 0;text-align:center;font-size:13px;font-weight:600}
+@keyframes gira{to{transform:rotate(360deg)}}
+@keyframes balanca{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.2px)}}
+@keyframes estrada{to{stroke-dashoffset:24}}
+@keyframes vento{0%{transform:translateX(20px);opacity:0}30%{opacity:.8}100%{transform:translateX(-30px);opacity:0}}
+/* boas-vindas, frases e datas */
+.hero{background:#000;color:#fff;border-radius:14px;padding:16px;margin-bottom:14px;position:relative;overflow:hidden}
+.hero .saud{font-size:18px;font-weight:700}
+.hero .frase{margin-top:8px;font-size:15px;line-height:1.45;opacity:.92}
+.hero .frase small{display:block;margin-top:6px;font-size:12px;opacity:.6;letter-spacing:.4px;text-transform:uppercase}
+.hero:after{content:"";position:absolute;right:-40px;top:-40px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.06)}
+.datas{display:grid;gap:8px}
+.data{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff}
+.data .em{font-size:26px;flex:none}
+.data .tx{flex:1;min-width:0}
+.data .tx b{display:block}
+.data .tx span{font-size:13px;color:var(--mut)}
+.data .falta{font-size:12px;font-weight:700;background:var(--amb);color:var(--am);border-radius:99px;padding:3px 9px;white-space:nowrap}
+.data .falta.hoje{background:var(--vmb);color:var(--vm)}
+.chipsDatas{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.chipsDatas span{background:rgba(255,255,255,.12);border-radius:99px;padding:4px 10px;font-size:12.5px}
+/* alertas */
+.tag.lar{background:var(--lab);color:var(--la)}
+.alertaBox{background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:10px 12px;margin:12px 0}
+.alertaBox b{color:var(--la)}
+.alertaBox ul{margin:6px 0 0;padding-left:18px;font-size:13.5px}
+.alertaBox li{margin:3px 0}
+.al{display:flex;gap:12px;border:1px solid var(--line);border-left:4px solid #f59e0b;border-radius:12px;padding:12px;margin-bottom:10px;background:#fff}
+.al.alto{border-left-color:#dc2626}
+.al.info{border-left-color:#3b82f6}
+.al .ic{font-size:22px;flex:none}
+.al .tx{flex:1}
+.al .tx b{display:block}
+.al .tx div{font-size:13.5px;color:var(--ink);margin-top:2px}
+.al .tx small{color:var(--mut)}
+.avisoRep{grid-column:1/-1;font-size:12.5px;background:var(--amb);color:var(--am);border-radius:8px;padding:6px 8px}
+/* comemoração */
+#festa{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);padding:20px}
+#festa .box{background:#fff;border-radius:20px;padding:28px 22px;text-align:center;max-width:360px;width:100%;animation:entra .45s cubic-bezier(.2,1.4,.4,1)}
+#festa svg{width:110px;height:110px}
+#festa .circ{stroke-dasharray:300;stroke-dashoffset:300;animation:traca .6s ease-out forwards}
+#festa .chk{stroke-dasharray:80;stroke-dashoffset:80;animation:traca .4s .5s ease-out forwards}
+#festa h2{font-size:28px;margin:10px 0 4px}
+#festa p{margin:6px 0;color:var(--mut)}
+#festa .grat{color:var(--ink);font-weight:600}
+#confete{position:fixed;inset:0;pointer-events:none;z-index:71}
+@keyframes traca{to{stroke-dashoffset:0}}
+@keyframes entra{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
 @media(min-width:700px){.ov{align-items:center}}
 @media(max-width:640px){.grid,.tipos,.prios{grid-template-columns:1fr}main{padding:12px}.carr{grid-template-columns:1fr 80px 34px}}
 </style>
@@ -201,6 +261,8 @@ tr.baixo td{background:#fff7ed}
 <div id="det" class="ov"><div class="caixa larga"><button class="fechar" data-fechar="det">×</button><div id="detC"></div></div></div>
 <div id="modal" class="ov"><div class="caixa"><button class="fechar" data-fechar="modal">×</button><h3 id="mdTit"></h3><div class="sub" id="mdSub"></div><form id="mdForm"></form></div></div>
 <div id="carga"><div></div><p>Salvando…</p></div>
+<div id="festa"><div class="box"><svg viewBox="0 0 110 110"><circle class="circ" cx="55" cy="55" r="46" fill="none" stroke="#16a34a" stroke-width="7"/><path class="chk" d="M33 57 L49 72 L78 40" fill="none" stroke="#16a34a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg><h2>Uhul! 🎉</h2><p id="festaTx"></p><p class="grat" id="festaGrat"></p><button class="btn prim" style="margin-top:10px;width:100%" data-fecharfesta="1">Fechar</button></div></div>
+<canvas id="confete"></canvas>
 <div id="toast"></div>
 
 <script>
@@ -212,11 +274,12 @@ document.querySelectorAll('img.lg').forEach(i => i.src = LOGO);
 const API = 'https://script.google.com/macros/s/AKfycbyfetXgIXuKpcR4kgD0pMnuPFlO_OXuA4t8vWIpeconb_M05oscwN3cBXUfvktsNDhl/exec';
 // ================================================================
 
-const ATIVOS = ['Pendente','Visto','Aguardando orçamento','Em compra','Em separação','Separado','Pendência na entrega'];
-const CONFIRMAVEIS = ['Visto','Aguardando orçamento','Em compra','Em separação','Separado','Pendência na entrega'];
+const ATIVOS = ['Pendente','Visto','Aguardando orçamento','Em compra','Em separação','Separado','Em trânsito','Pendência na entrega'];
+const CONFIRMAVEIS = ['Visto','Aguardando orçamento','Em compra','Em separação','Separado','Em trânsito','Pendência na entrega'];
+const A_RECEBER = ['Separado','Em trânsito'];
 const S = {perfil:'', unidade:'', senha:'', d:null, aba:'', detId:'', nome:'',
-  novo:{tipo:'', carrinho:[], busca:'', cat:'', fotos:[], prioridade:'Normal'}};
-const F = {meus:'andamento', grupo:'abertos', unidade:'', prio:'', busca:'', estCat:'', estBusca:'', estBaixo:false, movMes:'', movDest:'', movTipo:'', logBusca:'', logUn:''};
+  novo:{tipo:'', carrinho:[], busca:'', cat:'', fotos:[], prioridade:'Normal', obs:''}};
+const F = {meus:'andamento', grupo:'abertos', unidade:'', prio:'', busca:'', estCat:'', estBusca:'', estBaixo:false, movMes:'', movDest:'', movTipo:'', logBusca:'', logUn:'', alTipo:''};
 
 // ---------- utilidades
 const $ = s => document.querySelector(s);
@@ -242,8 +305,10 @@ function rotulo(st, tipo){
     if (st === 'Em separação') return 'Em execução';
     if (st === 'Separado') return 'Serviço concluído';
     if (st === 'Entregue') return 'Finalizado';
+    if (st === 'Em trânsito') return 'Equipe a caminho';
   }
   if (st === 'Separado') return 'Separado p/ entrega';
+  if (st === 'Em trânsito') return 'Em trânsito 🚗';
   return st;
 }
 const sugestoes = (alvo, ops) => ops.length ? `<div class="sug">${ops.slice(0, 12).map(o => `<button type="button" data-sug="${esc(alvo)}" data-v="${esc(o)}">${esc(o)}</button>`).join('')}</div>` : '';
@@ -257,7 +322,8 @@ function prazoInfo(c){
     return {txt: noPrazo ? 'Entregue no prazo' : 'Entregue fora do prazo', cls: noPrazo ? '' : 'atrasado', atrasado:false};
   }
   if (!ativo(c)) return {txt:'', cls:'', atrasado:false};
-  if (c.status === 'Separado') return {txt:'Aguardando confirmação da filial', cls:'', atrasado:false};
+  if (c.status === 'Separado') return {txt: c.tipo === 'Reparo' ? 'Aguardando confirmação da filial' : 'Pronto — aguardando saída', cls:'', atrasado:false};
+  if (c.status === 'Em trânsito') return {txt:'A caminho' + (c.entregador ? ' com ' + c.entregador : ''), cls:'', atrasado:false};
   const dias = Math.round((diaZero(c.prazo) - diaZero(new Date())) / 864e5);
   if (dias < 0) return {txt:`Atrasado ${-dias} dia${dias === -1 ? '' : 's'}`, cls:'atrasado', atrasado:true};
   if (dias === 0) return {txt:'Vence hoje', cls:'hoje', atrasado:false};
@@ -267,9 +333,12 @@ function prazoInfo(c){
 function timeline(c){
   if (c.status === 'Cancelado') return `<div class="inf" style="background:var(--czb)">Cancelado em ${dataHora(c.cancelado_em)} por <b>${esc(c.cancelado_por)}</b> — ${esc(c.motivo_cancelamento)}</div>`;
   const rep = c.tipo === 'Reparo';
-  const passos = ['Pendente','Visto', rep ? 'Em execução' : 'Em separação / compra', rep ? 'Concluído' : 'Separado', rep ? 'Finalizado' : 'Entregue'];
-  const idx = {'Pendente':0,'Visto':1,'Aguardando orçamento':2,'Em compra':2,'Em separação':2,'Pendência na entrega':2,'Separado':3,'Entregue':4}[c.status] ?? 0;
-  return `<div class="tl">${passos.map((p, i) => `<div class="p ${i < idx || c.status === 'Entregue' ? 'f' : ''} ${i === idx && c.status !== 'Entregue' ? 'a' : ''}"><i></i>${esc(i === 2 && idx === 2 ? rotulo(c.status, c.tipo) : p)}</div>`).join('')}</div>`;
+  const passos = rep ? ['Pendente','Visto','Em execução','Concluído','Finalizado'] : ['Pendente','Visto','Em separação / compra','Separado','Em trânsito','Entregue'];
+  const mapa = rep ? {'Pendente':0,'Visto':1,'Aguardando orçamento':2,'Em compra':2,'Em separação':2,'Em trânsito':2,'Pendência na entrega':2,'Separado':3,'Entregue':4}
+                   : {'Pendente':0,'Visto':1,'Aguardando orçamento':2,'Em compra':2,'Em separação':2,'Pendência na entrega':2,'Separado':3,'Em trânsito':4,'Entregue':5};
+  const idx = mapa[c.status] ?? 0, fim = c.status === 'Entregue';
+  const icone = {'Em separação':'📦','Em compra':'🛒','Aguardando orçamento':'🧾','Em trânsito':'🚗','Pendência na entrega':'⚠️','Pendente':'⏳'}[c.status];
+  return `<div class="tl">${passos.map((p, i) => { const at = i === idx && !fim; return `<div class="p ${i < idx || fim ? 'f' : ''} ${at ? 'a' : ''}">${at && icone ? `<i class="em">${icone}</i>` : '<i></i>'}${esc(at && i === 2 ? rotulo(c.status, c.tipo) : p)}</div>`; }).join('')}</div>`;
 }
 
 function toast(msg, erro){ const t = $('#toast'); t.textContent = msg; t.className = erro ? 'erro' : ''; t.style.display = 'block'; clearTimeout(t._t); t._t = setTimeout(() => t.style.display = 'none', erro ? 7000 : 3500); }
@@ -374,15 +443,15 @@ setInterval(async () => {
 // ---------- abas
 function abas(){
   const C = S.d.chamados;
-  if (!gestao()) return [['novo','＋ Novo pedido'],['meus','Meus chamados', C.filter(c => c.status === 'Separado').length]];
+  if (!gestao()) return [['novo','＋ Novo pedido'],['meus','Meus chamados', C.filter(c => A_RECEBER.includes(c.status)).length]];
   const baixo = S.d.itens.filter(i => i.ativo !== 'não' && String(i.estoque_minimo) !== '' && num(i.estoque_minimo) > 0 && num(i.estoque_atual) <= num(i.estoque_minimo)).length;
-  return [['fila','Chamados', C.filter(c => c.status === 'Pendente' || c.status === 'Pendência na entrega').length],['geral','Visão geral'],['estoque','Estoque', baixo],['mov','Movimentações'],['log','Registro']];
+  return [['fila','Chamados', C.filter(c => c.status === 'Pendente' || c.status === 'Pendência na entrega').length],['alertas','⚠ Alertas', analisar().lista.filter(a => a.nivel !== 'info').length],['geral','Visão geral'],['estoque','Estoque', baixo],['mov','Movimentações'],['log','Registro']];
 }
 
 function render(){
   if (!S.d) return;
   $('#tabs').innerHTML = abas().map(([k, t, n]) => `<button data-aba="${k}" class="${S.aba === k ? 'on' : ''}">${t}${n ? `<span class="n">${n}</span>` : ''}</button>`).join('');
-  const v = {novo:viewNovo, meus:viewMeus, fila:viewFila, geral:viewGeral, estoque:viewEstoque, mov:viewMov, log:viewLog}[S.aba];
+  const v = {novo:viewNovo, meus:viewMeus, fila:viewFila, alertas:viewAlertas, geral:viewGeral, estoque:viewEstoque, mov:viewMov, log:viewLog}[S.aba];
   $('#view').innerHTML = v ? v() : '';
   if (S.aba === 'novo') ligarNovo();
 }
@@ -390,7 +459,7 @@ function render(){
 // ================= FILIAL: NOVO PEDIDO =================
 function viewNovo(){
   const n = S.novo;
-  if (!n.tipo) return `<div class="card"><h2>O que a filial ${esc(S.unidade)} precisa?</h2>
+  if (!n.tipo) return boasVindas() + `<div class="card"><h2>O que a filial ${esc(S.unidade)} precisa?</h2>
     <div class="tipos">
       <button class="tipo" data-tipo="Material"><span class="ic">📦</span><b>Pedir material</b><span>Copa, limpeza, escritório, uniformes, elétrica, hidráulica, eventos… pode pedir vários itens de uma vez.</span></button>
       <button class="tipo" data-tipo="Reparo"><span class="ic">🔧</span><b>Reparo ou manutenção</b><span>Algo quebrado ou com problema na unidade. Mande foto — pode precisar de orçamento.</span></button>
@@ -426,7 +495,7 @@ function viewNovo(){
     </div>
     <div class="grid" style="margin-top:12px">
       <label>Quem está pedindo<input id="nvNome" value="${esc(S.nome)}" placeholder="Seu nome" autocomplete="off">${sugestoes('nvNome', nomes)}</label>
-      ${rep ? '' : '<label>Observação geral (opcional)<input id="nvObs" placeholder="Ex.: entregar junto com o pedido da semana"></label>'}
+      ${rep ? '' : `<label>Observação geral (opcional)<input id="nvObs" value="${esc(n.obs || '')}" placeholder="Ex.: entregar junto com o pedido da semana"></label>`}
     </div>
     <button class="btn prim" id="nvEnviar" style="width:100%;margin-top:14px">Enviar pedido</button>
   </div>`;
@@ -443,6 +512,7 @@ function ligarNovo(){
   };
   $('#nvPrios').onchange = ev => { n.prioridade = ev.target.value; document.querySelectorAll('#nvPrios .prio').forEach(l => l.classList.toggle('on', l.querySelector('input').checked)); };
   $('#nvEnviar').onclick = enviarNovo;
+  if ($('#nvObs')) $('#nvObs').oninput = ev => n.obs = ev.target.value;
   renderFotos();
 }
 
@@ -490,6 +560,7 @@ function renderCarrinho(){
       <input type="number" min="1" step="1" inputmode="numeric" value="${esc(l.quantidade)}" data-q="${k}" aria-label="Quantidade">
       <button class="rm" data-rm="${k}" title="Remover">×</button>
       <input class="obs" placeholder="Detalhe (opcional): tamanho, cor, modelo…" value="${esc(l.obs)}" data-o="${k}">
+      ${(r => r ? `<div class="avisoRep">🔁 Vocês já pediram ${esc(l.item)} em ${dataBR(r.c.aberto_em)} (${esc(r.c.id)}, ${N(r.l.quantidade)} ${esc(r.l.unidade_medida)}). Ainda precisa? Se sim, pode seguir.</div>` : '')(pedidoRecente(l))}
     </div>`).join('');
   alvo.querySelectorAll('[data-q]').forEach(i => i.oninput = () => n.carrinho[+i.dataset.q].quantidade = i.value);
   alvo.querySelectorAll('[data-o]').forEach(i => i.oninput = () => n.carrinho[+i.dataset.o].obs = i.value);
@@ -536,20 +607,20 @@ async function enviarNovo(){
   }
   lembrarNome(nome);
   await executar('abrirChamado', p, () => {
-    S.novo = {tipo:'', carrinho:[], busca:'', cat:'', fotos:[], prioridade:'Normal'};
+    S.novo = {tipo:'', carrinho:[], busca:'', cat:'', fotos:[], prioridade:'Normal', obs:''};
     S.aba = 'meus'; F.meus = 'andamento';
   });
 }
 
 // ================= FILIAL: MEUS CHAMADOS =================
 function viewMeus(){
-  const g = {andamento:c => ativo(c) && c.status !== 'Separado', confirmar:c => c.status === 'Separado', fim:c => !ativo(c)};
+  const g = {andamento:c => ativo(c) && !A_RECEBER.includes(c.status), confirmar:c => A_RECEBER.includes(c.status), fim:c => !ativo(c)};
   const lista = S.d.chamados.filter(g[F.meus]);
   const cont = k => S.d.chamados.filter(g[k]).length;
   return `<div class="chips" data-ctx="meus">
-    ${[['andamento','Em andamento'],['confirmar','Confirmar recebimento'],['fim','Finalizados / cancelados']].map(([k,t]) => `<button data-g="${k}" class="${F.meus === k ? 'on' : ''}">${t} (<b>${cont(k)}</b>)</button>`).join('')}
+    ${[['andamento','Em andamento'],['confirmar','A caminho / confirmar'],['fim','Finalizados / cancelados']].map(([k,t]) => `<button data-g="${k}" class="${F.meus === k ? 'on' : ''}">${t} (<b>${cont(k)}</b>)</button>`).join('')}
   </div>
-  ${F.meus === 'confirmar' && lista.length ? '<div class="inf" style="margin-bottom:10px">Estes chamados já foram separados ou concluídos. Quando receber, abra e toque em <b>Confirmar recebimento</b> informando a data e quem entregou.</div>' : ''}
+  ${F.meus === 'confirmar' && lista.length ? '<div class="inf" style="margin-bottom:10px">Estes pedidos já estão separados ou a caminho no BYD da Gerber 🚗. Quando chegar, abra e toque em <b>Confirmar recebimento</b> informando a data e quem entregou.</div>' : ''}
   ${lista.length ? lista.map(cardChamado).join('') : '<div class="card vazio">Nenhum chamado aqui.</div>'}`;
 }
 
@@ -564,7 +635,9 @@ function cardChamado(c){
       <span>Aberto ${dataHora(c.aberto_em)}</span>
       ${pz.txt ? `<span class="${pz.cls}">${pz.txt}</span>` : ''}
       ${c.fotos.length ? `<span>📷 ${c.fotos.length}</span>` : ''}
+      ${gestao() && ativo(c) && (analisar().porCh[c.id] || []).length ? `<span class="tag lar">⚠ ${analisar().porCh[c.id].length} alerta${analisar().porCh[c.id].length > 1 ? 's' : ''}</span>` : ''}
     </div>
+    ${c.status === 'Em trânsito' ? byd(c) : ''}
     ${gestao() ? '' : timeline(c)}
   </div>`;
 }
@@ -577,7 +650,8 @@ const GRUPOS = {
   'Aguardando orçamento':['Aguardando orçamento', c => c.status === 'Aguardando orçamento'],
   'Em compra':['Em compra', c => c.status === 'Em compra'],
   'Em separação':['Em separação / execução', c => c.status === 'Em separação'],
-  'Separado':['Separados (aguardando filial)', c => c.status === 'Separado'],
+  'Separado':['Separados (aguardando saída)', c => c.status === 'Separado'],
+  'Em trânsito':['Em trânsito 🚗', c => c.status === 'Em trânsito'],
   'Pendência na entrega':['Pendência na entrega', c => c.status === 'Pendência na entrega'],
   atrasados:['Atrasados', c => prazoInfo(c).atrasado],
   'Entregue':['Entregues', c => c.status === 'Entregue'],
@@ -587,6 +661,7 @@ const GRUPOS = {
 
 function viewFila(){
   const d = S.d, b = semAcento(F.busca);
+  const topo = topoGestao();
   const lista = d.chamados.filter(GRUPOS[F.grupo][1])
     .filter(c => !F.unidade || c.unidade === F.unidade)
     .filter(c => !F.prio || c.prioridade === F.prio)
@@ -595,7 +670,7 @@ function viewFila(){
     lista.sort((x, y) => (prazoInfo(y).atrasado - prazoInfo(x).atrasado) || ((y.prioridade === 'Urgente') - (x.prioridade === 'Urgente')) || (x.aberto_em < y.aberto_em ? -1 : 1));
   }
   const cont = k => d.chamados.filter(GRUPOS[k][1]).filter(c => !F.unidade || c.unidade === F.unidade).length;
-  return `<div class="chips" data-ctx="fila">${Object.keys(GRUPOS).map(k => { const n = cont(k); return (n || ['abertos','todos','Pendente'].includes(k) || F.grupo === k) ? `<button data-g="${esc(k)}" class="${F.grupo === k ? 'on' : ''}">${GRUPOS[k][0]} (<b>${n}</b>)</button>` : ''; }).join('')}</div>
+  return topo + `<div class="chips" data-ctx="fila">${Object.keys(GRUPOS).map(k => { const n = cont(k); return (n || ['abertos','todos','Pendente'].includes(k) || F.grupo === k) ? `<button data-g="${esc(k)}" class="${F.grupo === k ? 'on' : ''}">${GRUPOS[k][0]} (<b>${n}</b>)</button>` : ''; }).join('')}</div>
   <div class="filtros">
     <select id="fUn"><option value="">Todas as filiais</option>${d.unidades.map(u => `<option ${F.unidade === u ? 'selected' : ''}>${esc(u)}</option>`).join('')}</select>
     <select id="fPrio"><option value="">Toda prioridade</option><option ${F.prio === 'Urgente' ? 'selected' : ''}>Urgente</option><option ${F.prio === 'Normal' ? 'selected' : ''}>Normal</option></select>
@@ -612,7 +687,7 @@ function viewGeral(){
   const atrasados = abertos.filter(x => prazoInfo(x).atrasado);
   const baixos = d.itens.filter(i => i.ativo !== 'não' && String(i.estoque_minimo) !== '' && num(i.estoque_minimo) > 0 && num(i.estoque_atual) <= num(i.estoque_minimo));
   const kp = (n, t, al, g) => `<div class="kpi ${al && n ? 'alerta' : ''}" ${g ? `data-ir="${esc(g)}" style="cursor:pointer"` : ''}><b>${n}</b><span>${t}</span></div>`;
-  const cols = ['Pendente','Visto','Aguardando orçamento','Em compra','Em separação','Separado','Pendência na entrega'];
+  const cols = ['Pendente','Visto','Aguardando orçamento','Em compra','Em separação','Separado','Em trânsito','Pendência na entrega'];
   const desde = Date.now() - 90 * 864e5;
   const fechados = C.filter(x => x.status === 'Entregue' && x.confirmado_em && new Date(x.confirmado_em).getTime() >= desde);
   const tempo = u => {
@@ -627,7 +702,8 @@ function viewGeral(){
     ${kp(c('Aguardando orçamento'), 'Aguardando orçamento', false, 'Aguardando orçamento')}
     ${kp(c('Em compra'), 'Em compra', false, 'Em compra')}
     ${kp(c('Em separação'), 'Em separação / execução', false, 'Em separação')}
-    ${kp(c('Separado'), 'Separados, aguardando confirmação da filial', false, 'Separado')}
+    ${kp(c('Separado'), 'Separados, aguardando saída', false, 'Separado')}
+    ${kp(c('Em trânsito'), 'Em trânsito no BYD 🚗', false, 'Em trânsito')}
     ${kp(c('Pendência na entrega'), 'Pendência na entrega', true, 'Pendência na entrega')}
     ${kp(atrasados.length, 'Atrasados (passou o prazo)', true, 'atrasados')}
     ${kp(abertos.filter(x => x.prioridade === 'Urgente').length, 'Urgentes em aberto', true, 'abertos')}
@@ -667,6 +743,8 @@ function renderDetalhe(){
     <h3 style="margin:0 40px 6px 0;font-size:18px">${esc(c.id)} · ${esc(c.unidade)} · ${c.tipo === 'Reparo' ? '🔧 Reparo / manutenção' : '📦 Material'}</h3>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${pill(c)}${c.prioridade === 'Urgente' ? '<span class="tag">URGENTE</span>' : '<span class="tag cinza">Normal</span>'}${pz.txt ? `<span class="peq ${pz.cls}">${pz.txt}</span>` : ''}</div>
     ${timeline(c)}
+    ${c.status === 'Em trânsito' ? byd(c) : ''}
+    ${gestao() && ativo(c) && (analisar().porCh[c.id] || []).length ? `<div class="alertaBox"><b>⚠ Antes de atender, confira:</b><ul>${analisar().porCh[c.id].map(a => `<li><b>${esc(a.titulo)}</b> — ${esc(a.txt)}</li>`).join('')}</ul></div>` : ''}
     <div class="info">
       ${inf('Pedido por', esc(c.solicitante))}
       ${inf('Aberto em', dataHora(c.aberto_em))}
@@ -676,7 +754,8 @@ function renderDetalhe(){
       ${inf('Visto por', c.visto_por ? esc(c.visto_por) + ' em ' + dataHora(c.visto_em) : '')}
       ${inf('Orçamento', c.orcamento_valor ? R(c.orcamento_valor) + ' — ' + esc(c.orcamento_status) + (c.orcamento_por ? ' por ' + esc(c.orcamento_por) : '') + (c.orcamento_obs ? '<br><span class="muted">' + esc(c.orcamento_obs) + '</span>' : '') : '')}
       ${inf('Separado por', c.separado_por ? esc(c.separado_por) + ' em ' + dataHora(c.separado_em) : '')}
-      ${inf('Entrega prevista por', esc(c.entregador))}
+      ${inf('Entrega por', esc(c.entregador))}
+      ${inf('Saiu para entrega', c.em_transito_em ? dataHora(c.em_transito_em) : '')}
       ${inf('Recebido', c.status === 'Entregue' ? `em ${dataBR(c.data_recebimento)} por ${esc(c.recebido_por)}<br>Entregue por: <b>${esc(c.entregue_por)}</b><br><span class="muted">Confirmado ${dataHora(c.confirmado_em)}</span>` : '')}
     </div>
     ${c.descricao ? `<div class="secao">${c.tipo === 'Reparo' ? 'Descrição do problema' : 'Observação'}</div><div class="caixaTxt">${esc(c.descricao)}</div>` : ''}
@@ -698,14 +777,15 @@ function acoesDetalhe(c){
       if (c.status !== 'Em separação') h += bt('mv:Em separação', rep ? 'Em execução' : 'Em separação');
       if (c.status !== 'Em compra') h += bt('mv:Em compra', 'Em compra');
       if (c.status !== 'Aguardando orçamento') h += bt('mv:Aguardando orçamento', 'Aguardando orçamento');
-      h += bt('mv:Separado', rep ? 'Serviço concluído' : (c.status === 'Separado' ? 'Atualizar entrega' : 'Separado p/ entrega'), 'ok');
+      if (c.status !== 'Separado') h += bt('mv:Separado', rep ? 'Serviço concluído' : 'Separado p/ entrega', 'ok');
+      h += bt('mv:Em trânsito', c.status === 'Em trânsito' ? '🚗 Atualizar entrega' : (rep ? '🚗 Equipe a caminho' : '🚗 Saiu no BYD'), 'ok');
       if (c.status === 'Aguardando orçamento' || c.orcamento_valor) {
         h += bt('orc:informar', c.orcamento_valor ? 'Novo valor de orçamento' : 'Informar orçamento');
         if (c.orcamento_valor && c.orcamento_status === 'Aguardando aprovação') h += bt('orc:aprovar', 'Aprovar orçamento', 'ok') + bt('orc:reprovar', 'Reprovar orçamento', 'no');
       }
     }
   } else if (CONFIRMAVEIS.includes(c.status)) {
-    h += bt('confirmar', c.status === 'Separado' ? '✓ Confirmar recebimento' : '✓ Já recebi', 'ok');
+    h += bt('confirmar', A_RECEBER.includes(c.status) ? '✓ Confirmar recebimento' : '✓ Já recebi', 'ok');
   }
   if (at) {
     h += bt('comentar', '💬 Comentar') + bt('foto', '📷 Adicionar foto');
@@ -756,14 +836,18 @@ function acaoDetalhe(x){
     Object.assign({}, nomeCampo, {label:'Quem recebeu (você)'}),
     {k:'ok', label:'Chegou tudo certo?', tipo:'select', op:[{v:'sim', t:'Sim, tudo certo'}, {v:'nao', t:'Não — faltou algo, veio errado ou serviço incompleto'}], v:'sim'},
     {k:'obs', label:'Observação (obrigatória se teve problema)', tipo:'area'}
-  ], 'Confirmar', envia('confirmarRecebimento'));
+  ], 'Confirmar', async v => {
+    if (v.nome) lembrarNome(v.nome);
+    const ok = await executar('confirmarRecebimento', Object.assign({id:c.id}, v));
+    if (ok && v.ok === 'sim') { fecharDet(); celebrar(c); }
+  });
 
   const [tipo, alvo] = x.split(':');
   if (tipo === 'mv') {
     const campos = [];
     if (alvo === 'Aguardando orçamento') campos.push({k:'orcamento_valor', label:'Valor do orçamento (R$) — se já tiver', tipo:'number'}, {k:'orcamento_obs', label:'Fornecedor / detalhe do orçamento'});
-    if (alvo === 'Separado') {
-      const comItem = c.itens.filter(l => l.item_id !== '');
+    if (alvo === 'Separado' || alvo === 'Em trânsito') {
+      const comItem = c.itens.filter(l => l.item_id !== '' && num(l.qtd_baixada) < num(l.quantidade));
       if (comItem.length) {
         campos.push({tipo:'info', html:'<b>Baixa no estoque</b> — confira quanto está saindo do almoxarifado (deixe 0 se veio de compra direta).'});
         comItem.forEach(l => {
@@ -774,7 +858,8 @@ function acaoDetalhe(x){
       }
       const livres = c.itens.filter(l => l.item_id === '');
       if (livres.length) campos.push({tipo:'info', html:'Itens livres (sem baixa automática): ' + livres.map(l => esc(l.item)).join(', ')});
-      campos.push({k:'entregador', label:c.tipo === 'Reparo' ? 'Quem fez o serviço' : 'Quem vai levar / entregar', v:c.entregador || '', tipo:'lista', op:['Roberta','Charles','Carol']});
+      if (alvo === 'Em trânsito') campos.unshift({tipo:'info', html:'🚗 <b>Saiu para entrega no BYD da Gerber.</b> A filial verá o carrinho a caminho e confirma quando chegar.'});
+      campos.push({k:'entregador', label:c.tipo === 'Reparo' ? 'Quem vai fazer o serviço' : 'Quem está levando', v:c.entregador || '', tipo:'lista', op:['Charles','Roberta','Carol'], req:alvo === 'Em trânsito'});
     }
     campos.push({k:'obs', label:'Observação para a filial (opcional)', tipo:'area', ph:alvo === 'Em compra' ? 'Ex.: previsão de chegada dia 20' : ''});
     return abrirModal(rotulo(alvo, c.tipo), sub, campos, 'Salvar', v => {
@@ -885,12 +970,265 @@ function viewLog(){
   </tbody></table></div></div>`;
 }
 
+// ================= FRASES, DATAS, BYD E COMEMORAÇÃO =================
+const FRASES = [
+  ['Motivação','Cada detalhe bem cuidado na unidade vira uma experiência melhor para o aluno.'],
+  ['Gratidão','Obrigado por cuidar da sua unidade como se fosse sua casa. Isso faz diferença.'],
+  ['Inspiração','Grandes resultados são feitos de pequenas rotinas repetidas com capricho.'],
+  ['Motivação','Unidade organizada é treino mais leve, equipe mais tranquila e aluno mais feliz.'],
+  ['Gratidão','Gente cuidando de gente: obrigado por fazer parte disso todos os dias.'],
+  ['Inspiração','Antecipar é cuidar. Quem planeja hoje não corre amanhã.'],
+  ['Motivação','Pedir com clareza é ajudar quem vai separar. Valeu pela parceria!'],
+  ['Gratidão','Cada pedido bem feito poupa tempo de alguém. Obrigado pelo cuidado.'],
+  ['Inspiração','A excelência mora nos detalhes que ninguém vê, mas todo mundo sente.'],
+  ['Motivação','Hoje é um ótimo dia para deixar a unidade ainda melhor do que estava ontem.'],
+  ['Gratidão','Obrigado por zelar pelos recursos da Gerber. Economizar também é cuidar.'],
+  ['Inspiração','Consistência vence intensidade — no treino e na gestão.'],
+  ['Motivação','Quem cuida do básico com excelência abre espaço para o extraordinário.'],
+  ['Gratidão','Seu trabalho é a primeira impressão do aluno. Obrigado por caprichar.'],
+  ['Inspiração','Uma equipe alinhada transforma rotina em resultado.'],
+  ['Motivação','Faltou algo? Peça. Sobrou? Avise. Assim a rede inteira ganha.'],
+  ['Gratidão','Obrigado por confirmar cada recebimento — é isso que mantém tudo nos trilhos.'],
+  ['Inspiração','Ambiente cuidado inspira treino com propósito.'],
+  ['Motivação','Pequenas melhorias todos os dias somam um grande salto no fim do ano.'],
+  ['Gratidão','Por trás de cada aluno satisfeito tem um líder atento. Obrigado!'],
+  ['Inspiração','Organização é liberdade: menos urgência, mais tempo para as pessoas.'],
+  ['Motivação','O aluno nota quando tudo funciona. Vamos fazer tudo funcionar.'],
+  ['Gratidão','Juntos somos mais fortes — no treino e no time. Obrigado por somar.'],
+  ['Inspiração','Planejar a data comemorativa com antecedência é o segredo do evento que encanta.'],
+  ['Motivação','Força, foco e capricho: a receita Gerber para um grande dia.'],
+  ['Gratidão','Seu cuidado com a estrutura protege a experiência de centenas de pessoas.'],
+  ['Inspiração','Quem mede, melhora. Quem registra, aprende.'],
+  ['Motivação','Um pedido certeiro hoje evita três correrias amanhã.'],
+  ['Gratidão','Obrigado por cada sorriso que você entrega na recepção e no salão.'],
+  ['Inspiração','Cultura é o que a equipe faz quando ninguém está olhando.']
+];
+const GRATIDAO = ['Obrigado por confirmar! Assim o ciclo fecha redondinho. 💪','Recebido e registrado. Valeu pela parceria! 🙌','Missão cumprida, time! Obrigado pelo cuidado. ✨','Mais um pedido entregue com sucesso. Gratidão! 💚','Show! Cada confirmação deixa a rede mais organizada. 🖤'];
+
+function saudacao(){ const h = new Date().getHours(); return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite'; }
+function fraseDoDia(){ const d = new Date(), ini = new Date(d.getFullYear(), 0, 0); const n = Math.floor((d - ini) / 864e5); return FRASES[n % FRASES.length]; }
+
+function pascoa(y){
+  const a = y % 19, b = Math.floor(y / 100), c = y % 100, d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3),
+    h = (19 * a + b - d - g + 15) % 30, i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7, m = Math.floor((a + 11 * h + 22 * l) / 451),
+    mes = Math.floor((h + l - 7 * m + 114) / 31), dia = ((h + l - 7 * m + 114) % 31) + 1;
+  return new Date(y, mes - 1, dia);
+}
+const nDomingo = (y, m, n) => { const d = new Date(y, m, 1); return new Date(y, m, 1 + (7 - d.getDay()) % 7 + 7 * (n - 1)); };
+const somaDias = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+function datasDoAno(y){
+  const P = pascoa(y), q1 = new Date(y, 10, 1), quinta4 = 1 + (4 - q1.getDay() + 7) % 7 + 21;
+  const base = [
+    ['Ano Novo', new Date(y,0,1), '🎆', 'Decoração de virada, metas do ano, kit boas-vindas para alunos novos'],
+    ['Carnaval', somaDias(P, -47), '🎭', 'Aulão temático, confete, decoração, horário especial'],
+    ['Dia Internacional da Mulher', new Date(y,2,8), '🌷', 'Flores, mimos para alunas e colaboradoras, decoração'],
+    ['Páscoa', P, '🐰', 'Chocolates, lembrancinhas, decoração'],
+    ['Dia das Mães', nDomingo(y,4,2), '💐', 'Homenagem às mães alunas e da equipe, brindes, decoração'],
+    ['Dia dos Namorados', new Date(y,5,12), '❤️', 'Treino em dupla, decoração, ação de indicação'],
+    ['Festa Junina', new Date(y,5,24), '🌽', 'Bandeirinhas, chapéus, comidas típicas, arraiá fit'],
+    ['Dia dos Pais', nDomingo(y,7,2), '👔', 'Homenagem aos pais, brindes, decoração'],
+    ['Dia do Profissional de Educação Física', new Date(y,8,1), '🏋️', 'Homenagem à equipe técnica, café especial'],
+    ['Setembro Amarelo', new Date(y,8,1), '💛', 'Laços amarelos, cartazes, campanha de valorização da vida'],
+    ['Outubro Rosa', new Date(y,9,1), '🎀', 'Laços rosa, decoração, campanha de prevenção'],
+    ['Dia das Crianças', new Date(y,9,12), '🧸', 'Brinquedos, doces, atividade kids'],
+    ['Halloween', new Date(y,9,31), '🎃', 'Decoração, aulão temático, doces'],
+    ['Novembro Azul', new Date(y,10,1), '💙', 'Laços azuis, cartazes, campanha de saúde do homem'],
+    ['Black Friday', new Date(y,10,quinta4 + 1), '🖤', 'Material de campanha, impressos, decoração'],
+    ['Natal', new Date(y,11,25), '🎄', 'Árvore, enfeites, luzes, confraternização da equipe']
+  ].map(([nome, d, e, dica]) => ({nome, d, e, dica}));
+  (S.d.datas || []).forEach(x => base.push({nome:x.nome, d:new Date(y, x.mes - 1, x.dia), e:'📌', dica:x.dica}));
+  return base;
+}
+function proximasDatas(){
+  const hoje = diaZero(new Date()), y = hoje.getFullYear();
+  return datasDoAno(y).concat(datasDoAno(y + 1))
+    .map(x => Object.assign(x, {falta: Math.round((diaZero(x.d) - hoje) / 864e5)}))
+    .filter(x => x.falta >= 0 && x.falta <= 30).sort((a, b) => a.falta - b.falta);
+}
+const faltaTxt = f => f === 0 ? 'É hoje!' : f === 1 ? 'Amanhã' : `Faltam ${f} dias`;
+
+function boasVindas(){
+  const [cat, frase] = fraseDoDia();
+  const transito = S.d.chamados.filter(c => c.status === 'Em trânsito');
+  const datas = proximasDatas();
+  return `<div class="hero"><div class="saud">${saudacao()}, equipe ${esc(S.unidade)}! 👋</div><div class="frase">“${esc(frase)}”<small>${esc(cat)} do dia</small></div></div>
+  ${transito.length ? `<div class="card"><h3>🚗 A caminho da sua unidade</h3>${transito.map(c => `<div data-abrir="${esc(c.id)}" style="cursor:pointer">${byd(c)}</div>`).join('')}</div>` : ''}
+  ${datas.length ? `<div class="card"><h3>📅 Datas chegando — vai precisar de algo?</h3><div class="datas">${datas.map(x => `<div class="data"><span class="em">${x.e}</span><div class="tx"><b>${esc(x.nome)} · ${x.d.toLocaleDateString('pt-BR')}</b><span>${esc(x.dica)}</span></div><div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end"><span class="falta ${x.falta <= 7 ? 'hoje' : ''}">${faltaTxt(x.falta)}</span><button class="btn sm" data-paradata="${esc(x.nome)}">Pedir</button></div></div>`).join('')}</div></div>` : ''}`;
+}
+
+function topoGestao(){
+  const [cat, frase] = fraseDoDia();
+  const datas = proximasDatas();
+  const al = analisar().lista.filter(a => a.nivel !== 'info').length;
+  return `<div class="hero"><div class="saud">${saudacao()}, ${esc(S.d.usuario.nome)}! 👋</div><div class="frase">“${esc(frase)}”<small>${esc(cat)} do dia</small></div>
+    <div class="chipsDatas">${al ? `<span data-aba="alertas" style="cursor:pointer;background:#f59e0b;color:#000;font-weight:700">⚠ ${al} alerta${al > 1 ? 's' : ''} para analisar</span>` : '<span>✅ Nenhum alerta de excesso ou repetição</span>'}${datas.map(x => `<span>${x.e} ${esc(x.nome)} — ${faltaTxt(x.falta).toLowerCase()}</span>`).join('')}</div></div>`;
+}
+
+function byd(c){
+  const quem = c.entregador ? ' com ' + esc(c.entregador) : '';
+  return `<div class="byd"><svg viewBox="0 0 240 92" aria-hidden="true">
+    <line class="estrada" x1="0" y1="84" x2="240" y2="84" stroke="#9ca3af" stroke-width="3" stroke-dasharray="14 10"/>
+    <g class="vento" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"><line x1="2" y1="48" x2="16" y2="48"/><line x1="6" y1="58" x2="18" y2="58"/></g>
+    <g class="carro">
+      <path d="M22 66 Q20 52 32 48 L66 42 Q80 26 102 23 L152 22 Q172 22 188 36 L214 42 Q226 45 226 56 L226 66 Q226 70 222 70 L26 70 Q22 70 22 66 Z" fill="#0b0b0b"/>
+      <path d="M86 42 Q96 29 108 28 L134 28 L134 42 Z" fill="#8fa3b8"/>
+      <path d="M140 28 L154 28 Q168 28 178 42 L140 42 Z" fill="#8fa3b8"/>
+      <rect x="216" y="49" width="9" height="5" rx="2" fill="#fde68a"/><rect x="22" y="51" width="5" height="6" rx="1" fill="#ef4444"/>
+      <image href="${LOGO}" x="94" y="48" width="74" height="18"/>
+      <g transform="translate(64 70)"><g class="roda"><circle r="13" fill="#1f2937"/><circle r="6" fill="#9ca3af"/><path d="M-6 0H6M0-6V6" stroke="#4b5563" stroke-width="2"/></g></g>
+      <g transform="translate(188 70)"><g class="roda"><circle r="13" fill="#1f2937"/><circle r="6" fill="#9ca3af"/><path d="M-6 0H6M0-6V6" stroke="#4b5563" stroke-width="2"/></g></g>
+    </g></svg>
+    <p>${esc(c.id)} ${c.tipo === 'Reparo' ? 'equipe a caminho' : 'está a caminho no BYD da Gerber'}${quem}${c.em_transito_em ? ' · saiu ' + dataHora(c.em_transito_em) : ''}</p></div>`;
+}
+
+function celebrar(c){
+  $('#festaTx').textContent = (c.tipo === 'Reparo' ? 'Serviço ' : 'Pedido ') + c.id + ' concluído!';
+  $('#festaGrat').textContent = GRATIDAO[Math.floor(Math.random() * GRATIDAO.length)];
+  $('#festa').style.display = 'flex';
+  confete();
+  clearTimeout(window._festa); window._festa = setTimeout(fecharFesta, 6000);
+}
+function fecharFesta(){ $('#festa').style.display = 'none'; }
+function confete(){
+  const cv = $('#confete'), ctx = cv.getContext('2d');
+  cv.width = innerWidth; cv.height = innerHeight;
+  const cores = ['#111111','#16a34a','#f59e0b','#3b82f6','#ef4444','#a855f7','#ffffff'];
+  const ps = Array.from({length:140}, () => ({x:Math.random() * cv.width, y:-20 - Math.random() * cv.height * .6, vx:(Math.random() - .5) * 3, vy:2 + Math.random() * 3.5, r:Math.random() * 6.28, vr:(Math.random() - .5) * .3, w:6 + Math.random() * 6, h:4 + Math.random() * 4, c:cores[Math.floor(Math.random() * cores.length)]}));
+  const ini = performance.now();
+  (function quadro(t){
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    ps.forEach(p => { p.x += p.vx; p.y += p.vy; p.vy += .04; p.r += p.vr; ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c; ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); ctx.restore(); });
+    if (t - ini < 3800) requestAnimationFrame(quadro); else ctx.clearRect(0, 0, cv.width, cv.height);
+  })(ini);
+}
+
+// ================= INTELIGÊNCIA: ALERTAS DE EXCESSO, DESPERDÍCIO E REPETIÇÃO =================
+const TIPOS_AL = {
+  repetido:['🔁','Pedido repetido'], excesso:['📈','Quantidade acima do normal'], rede:['⚖️','Consumo acima das outras filiais'],
+  crescente:['📊','Consumo subindo'], reparo:['🔧','Reparo recorrente'], urgencia:['🚨','Urgência demais'], parado:['⏳','Parado sem andamento']
+};
+const chaveItem = l => l.item_id !== '' && l.item_id != null ? 'i' + l.item_id : 'l' + semAcento(l.item).replace(/[^a-z0-9]+/g, ' ').trim();
+const mediana = a => { const b = a.slice().sort((x, y) => x - y), m = Math.floor(b.length / 2); return b.length % 2 ? b[m] : (b[m - 1] + b[m]) / 2; };
+let _an = {d:null, r:null};
+
+function analisar(){
+  if (_an.d === S.d && _an.r) return _an.r;
+  const d = S.d, cfg = d.alertas || {repeticao_dias:15, excesso_fator:2};
+  const DIA = 864e5, agora = Date.now();
+  const lista = [], porCh = {};
+  const add = a => { lista.push(a); if (a.id) (porCh[a.id] = porCh[a.id] || []).push(a); };
+  const validos = d.chamados.filter(c => c.status !== 'Cancelado');
+  const L = [];
+  validos.forEach(c => c.itens.forEach(l => L.push({c, l, k:chaveItem(l), t:new Date(c.aberto_em).getTime(), q:num(l.quantidade)})));
+  const nId = c => parseInt(String(c.id).replace(/\D/g, ''), 10) || 0;
+  L.sort((a, b) => a.t - b.t || nId(a.c) - nId(b.c) || num(a.l.linha) - num(b.l.linha));
+
+  // 1) mesmo item pedido de novo pela mesma filial em pouco tempo
+  L.forEach((x, i) => {
+    if (agora - x.t > 45 * DIA) return;
+    const ant = L.slice(0, i).filter(y => y.c.unidade === x.c.unidade && y.k === x.k && y.c.id !== x.c.id && x.t - y.t <= cfg.repeticao_dias * DIA);
+    if (!ant.length) return;
+    const u = ant[ant.length - 1], dias = Math.round((x.t - u.t) / DIA);
+    add({tipo:'repetido', nivel:ant.length >= 2 ? 'alto' : 'medio', id:x.c.id, unidade:x.c.unidade, t:x.t,
+      titulo:`${x.l.item} pedido de novo`,
+      txt:`${x.c.unidade} pediu ${N(x.q)} ${x.l.unidade_medida} em ${dataBR(x.c.aberto_em)} e já tinha pedido ${N(u.q)} em ${dataBR(u.c.aberto_em)} (${u.c.id}) — ${dias === 0 ? 'no mesmo dia' : dias + ' dia' + (dias > 1 ? 's' : '') + ' antes'}${ant.length >= 2 ? `. São ${ant.length + 1} pedidos em ${cfg.repeticao_dias} dias` : ''}.`});
+  });
+
+  // 2) quantidade muito acima do normal daquele item
+  L.forEach((x, i) => {
+    if (agora - x.t > 45 * DIA) return;
+    const hist = L.slice(0, i).filter(y => y.k === x.k).map(y => y.q);
+    if (hist.length < 3) return;
+    const med = mediana(hist);
+    if (x.q >= 3 && x.q >= cfg.excesso_fator * med) add({tipo:'excesso', nivel:x.q >= 3 * med ? 'alto' : 'medio', id:x.c.id, unidade:x.c.unidade, t:x.t,
+      titulo:`Quantidade alta de ${x.l.item}`, txt:`${x.c.unidade} pediu ${N(x.q)} ${x.l.unidade_medida}; o normal por pedido na rede é ${N(med)}.`});
+  });
+
+  // 3) filial consumindo bem mais que as outras (30 dias) — possível desperdício
+  const rec = L.filter(x => agora - x.t <= 30 * DIA);
+  const porItem = {};
+  rec.forEach(x => { const o = porItem[x.k] = porItem[x.k] || {nome:x.l.item, un:x.l.unidade_medida, tot:{}}; o.tot[x.c.unidade] = (o.tot[x.c.unidade] || 0) + x.q; });
+  const nUn = d.unidades.length;
+  Object.values(porItem).forEach(o => {
+    d.unidades.forEach(u => {
+      const T = o.tot[u] || 0; if (T < 3) return;
+      const outras = d.unidades.filter(v => v !== u).map(v => o.tot[v] || 0);
+      const med = outras.reduce((a, b) => a + b, 0) / Math.max(1, nUn - 1);
+      if (med > 0 && T >= 2 * med) add({tipo:'rede', nivel:T >= 3 * med ? 'alto' : 'medio', unidade:u, t:agora,
+        titulo:`${u}: ${o.nome} acima da média`, txt:`Nos últimos 30 dias ${u} pediu ${N(T)} ${o.un}; a média das outras filiais foi ${N(Math.round(med * 10) / 10)}. Vale conferir se há desperdício ou estoque parado na unidade.`});
+    });
+  });
+
+  // 4) consumo total da filial subindo (30 dias vs média dos 90 anteriores)
+  d.unidades.forEach(u => {
+    const cur = L.filter(x => x.c.unidade === u && agora - x.t <= 30 * DIA).reduce((s, x) => s + x.q, 0);
+    const antes = L.filter(x => x.c.unidade === u && agora - x.t > 30 * DIA && agora - x.t <= 120 * DIA);
+    if (!antes.length) return;
+    const media = antes.reduce((s, x) => s + x.q, 0) / 3;
+    if (media > 0 && cur >= 1.5 * media && cur - media >= 10) add({tipo:'crescente', nivel:'medio', unidade:u, t:agora,
+      titulo:`${u} está pedindo mais`, txt:`${N(cur)} itens pedidos nos últimos 30 dias, contra uma média de ${N(Math.round(media))} por mês nos 3 meses anteriores (+${Math.round((cur / media - 1) * 100)}%).`});
+  });
+
+  // 5) reparo recorrente no mesmo local (60 dias)
+  const reps = validos.filter(c => c.tipo === 'Reparo').map(c => ({c, t:new Date(c.aberto_em).getTime(), loc:semAcento(c.local).replace(/[^a-z0-9]+/g, ' ').trim()})).sort((a, b) => a.t - b.t || nId(a.c) - nId(b.c));
+  reps.forEach((x, i) => {
+    if (agora - x.t > 60 * DIA || !x.loc) return;
+    const ant = reps.slice(0, i).filter(y => y.c.unidade === x.c.unidade && x.t - y.t <= 60 * DIA && y.loc && (y.loc === x.loc || y.loc.includes(x.loc) || x.loc.includes(y.loc)));
+    if (ant.length) add({tipo:'reparo', nivel:'alto', id:x.c.id, unidade:x.c.unidade, t:x.t,
+      titulo:`Reparo de novo: ${x.c.local}`, txt:`${x.c.unidade} já abriu ${ant.length} chamado${ant.length > 1 ? 's' : ''} para "${ant[ant.length - 1].c.local}" nos últimos 60 dias (${ant.map(a => a.c.id).join(', ')}). Pode ser hora de resolver a causa ou trocar o equipamento.`});
+  });
+
+  // 6) urgência demais (30 dias)
+  d.unidades.forEach(u => {
+    const ch = validos.filter(c => c.unidade === u && agora - new Date(c.aberto_em).getTime() <= 30 * DIA);
+    const urg = ch.filter(c => c.prioridade === 'Urgente').length;
+    if (ch.length >= 4 && urg / ch.length >= 0.5) add({tipo:'urgencia', nivel:'medio', unidade:u, t:agora,
+      titulo:`${u} usa muito o "Urgente"`, txt:`${urg} de ${ch.length} chamados dos últimos 30 dias foram marcados como urgentes. Quando tudo é urgente, nada é — vale alinhar com a liderança.`});
+  });
+
+  // 7) chamados parados
+  d.chamados.filter(ativo).forEach(c => {
+    const ref = new Date(c.atualizado_em || c.aberto_em).getTime(), dias = Math.floor((agora - ref) / DIA);
+    const regra = {'Visto':[2,'visto e sem ação'], 'Separado':[2,'separado e ainda não saiu'], 'Em trânsito':[2,'em trânsito e a filial não confirmou'], 'Pendência na entrega':[1,'com pendência de entrega sem resposta'], 'Aguardando orçamento':[5,'aguardando orçamento']}[c.status];
+    if (regra && dias >= regra[0]) add({tipo:'parado', nivel:'info', id:c.id, unidade:c.unidade, t:ref,
+      titulo:`${c.id} parado há ${dias} dias`, txt:`${c.unidade} · ${c.resumo} — ${regra[1]}.`});
+  });
+
+  const ordem = {alto:0, medio:1, info:2};
+  lista.sort((a, b) => ordem[a.nivel] - ordem[b.nivel] || b.t - a.t);
+  _an = {d:S.d, r:{lista, porCh}};
+  return _an.r;
+}
+
+function viewAlertas(){
+  const {lista} = analisar(), cfg = S.d.alertas || {};
+  const cont = k => lista.filter(a => !k || a.tipo === k).length;
+  const f = F.alTipo || '';
+  const vis = lista.filter(a => !f || a.tipo === f);
+  return `${topoGestao()}
+  <div class="inf" style="margin-bottom:12px">O painel analisa sozinho todos os chamados e aponta o que merece atenção <b>antes de executar</b>: pedidos repetidos em até ${cfg.repeticao_dias || 15} dias, quantidades ${cfg.excesso_fator || 2}× acima do normal, filiais consumindo bem mais que as outras, consumo subindo, reparos que se repetem, excesso de urgência e chamados parados. Os alertas também aparecem dentro de cada chamado.</div>
+  <div class="chips" data-ctx="alertas"><button data-g="" class="${!f ? 'on' : ''}">Todos (<b>${cont('')}</b>)</button>${Object.keys(TIPOS_AL).map(k => cont(k) || f === k ? `<button data-g="${k}" class="${f === k ? 'on' : ''}">${TIPOS_AL[k][0]} ${TIPOS_AL[k][1]} (<b>${cont(k)}</b>)</button>` : '').join('')}</div>
+  ${vis.length ? vis.map(a => `<div class="al ${a.nivel}"><span class="ic">${TIPOS_AL[a.tipo][0]}</span><div class="tx"><small>${TIPOS_AL[a.tipo][1]} · ${esc(a.unidade || '')}</small><b>${esc(a.titulo)}</b><div>${esc(a.txt)}</div></div>${a.id ? `<button class="btn sm" data-abrir="${esc(a.id)}" style="align-self:center">Abrir ${esc(a.id)}</button>` : ''}</div>`).join('')
+    : '<div class="card vazio">✅ Nenhum alerta agora. A rede está pedindo dentro do normal.</div>'}`;
+}
+
+// aviso para o líder: item já pedido há pouco tempo
+function pedidoRecente(l){
+  const dias = (S.d.alertas || {}).repeticao_dias || 15, k = chaveItem(l), lim = Date.now() - dias * 864e5;
+  let achou = null;
+  S.d.chamados.filter(c => c.status !== 'Cancelado' && new Date(c.aberto_em).getTime() >= lim)
+    .forEach(c => c.itens.forEach(x => { if (chaveItem(x) === k && (!achou || c.aberto_em > achou.c.aberto_em)) achou = {c, l:x}; }));
+  return achou;
+}
+
 // ================= EVENTOS =================
 document.addEventListener('click', ev => {
   const t = ev.target;
   const el = s => t.closest(s);
   let b;
   if ((b = el('[data-sug]'))) { ev.preventDefault(); const i = document.getElementById(b.dataset.sug); if (i) { i.value = b.dataset.v; i.dispatchEvent(new Event('input', {bubbles:true})); } return; }
+  if ((b = el('[data-fecharfesta]')) || t.id === 'festa') { fecharFesta(); return; }
+  if ((b = el('[data-paradata]'))) { S.novo = {tipo:'Material', carrinho:[], busca:'', cat:'', fotos:[], prioridade:'Normal', obs:'Para: ' + b.dataset.paradata}; S.aba = 'novo'; render(); window.scrollTo(0,0); toast('Monte o pedido para ' + b.dataset.paradata + '.'); return; }
   if ((b = el('[data-fechar]'))) { ev.preventDefault(); b.dataset.fechar === 'det' ? fecharDet() : fecharModal(); return; }
   if (t.id === 'det') { fecharDet(); return; }
   if (t.id === 'modal') { fecharModal(); return; }
@@ -898,7 +1236,7 @@ document.addEventListener('click', ev => {
   if ((b = el('[data-x]'))) { acaoDetalhe(b.dataset.x); return; }
   if ((b = el('[data-abrir]'))) { ev.preventDefault(); abrirDetalhe(b.dataset.abrir); return; }
   if ((b = el('[data-ir]'))) { F.grupo = b.dataset.ir; S.aba = 'fila'; render(); return; }
-  if ((b = el('[data-g]'))) { const ctx = b.closest('[data-ctx]').dataset.ctx; if (ctx === 'meus') F.meus = b.dataset.g; else F.grupo = b.dataset.g; render(); return; }
+  if ((b = el('[data-g]'))) { const ctx = b.closest('[data-ctx]').dataset.ctx; if (ctx === 'meus') F.meus = b.dataset.g; else if (ctx === 'alertas') F.alTipo = b.dataset.g; else F.grupo = b.dataset.g; render(); return; }
   if ((b = el('[data-e]'))) { acaoEstoque(b.dataset.e, b.dataset.id); return; }
   // novo pedido
   if ((b = el('[data-tipo]'))) { S.novo.tipo = b.dataset.tipo; render(); return; }
